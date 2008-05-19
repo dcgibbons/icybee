@@ -6,6 +6,8 @@
 
     <property name="icb.home" value="."/>
     <property name="src.dir" value="src"/>
+    <property name="src.java.main.dir" value="${src.dir}/main"/>
+    <property name="src.java.test.dir" value="${src.dir}/test/"/>
     <property name="docs.dir" value="docs"/>
     <property name="build.dir" value="${basedir}/build"/>
     <property name="lib.dir" value="${build.dir}/lib"/>
@@ -40,9 +42,9 @@
         		deprecation="on" 
         		destdir="${build.classes}"
         		target="1.4"
-                        source="1.4"
+                source="1.4"
         		optimize="on" 
-        		srcdir="${src.dir}">
+        		srcdir="${src.java.main.dir}">
             <include name="**/*.java"/>
             <classpath>
                 <fileset dir="lib">
