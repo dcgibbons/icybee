@@ -1,9 +1,8 @@
 #
-# $Id: icb_init.tcl,v 1.5 2003/08/14 20:18:36 dcgibbons Exp $
+# IcyBee - http://www.nuclearbunny.org/icybee/
+# A client for the Internet CB Network - http://www.icb.net/
 #
-# Internet CB Client
-#
-# Copyright © 2001-2002 David C. Gibbons
+# Copyright (C) 2000-2008 David C. Gibbons
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

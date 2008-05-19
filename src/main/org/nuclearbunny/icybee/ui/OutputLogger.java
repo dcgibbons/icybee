@@ -1,10 +1,8 @@
 /*
- * $Id: OutputLogger.java,v 1.2 2004/09/19 03:30:13 dcgibbons Exp $
- *
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright © 2000-2004 David C. Gibbons, dcg@nuclearbunny.org
+ * Copyright (C) 2000-2008 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

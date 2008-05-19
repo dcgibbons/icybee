@@ -1,10 +1,8 @@
 /*
- * $Id: ClientTimeCommand.java,v 1.3 2003/01/06 03:27:30 dcgibbons Exp $
- *
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright © 2000-2003 David C. Gibbons, dcg@nuclearbunny.org
+ * Copyright (C) 2000-2008 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package org.nuclearbunny.icybee.commands;
 
 import org.nuclearbunny.icybee.*;
