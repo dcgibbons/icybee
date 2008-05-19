@@ -1,0 +1,200 @@
+<html>
+	<head>
+		<title>What's new in IcyBee?</title>
+	</head>
+	<body>
+		<center><h1>What's new in IcyBee?</h1></center>
+
+		<h2>Version 0.92 - September 19, 2004</h2>
+		<ul>
+		    <li>File Logging now honors the message timestamp feature.</li>
+		    <li>Fixed bug where newlines were removed instead of being converted
+		        to spaces. This should allow pastes of large amounts of text to
+		        be easier to read.</li>
+		    <li>Added a Paste Special command that will attempt to shrink any
+		        valid URLs found in the clipboard text being pasted. Currently,
+		        the <a href="http://tinyurl.com">TinyURL</a> service is used
+		        to shrink the URLs. Paste Special has a keyboard shortcut of
+		        Press Shift when performing a normal Paste to activate this
+                        feature. <b>Warning:</b> presently, there is no way to cancel
+                        or to adjust the timeout value, so if TinyURL is slow, the client
+                        will wait a bit before giving up. This will be addressed in
+                        a future version.</li>
+		</ul>
+
+        <h2>Version 0.91 - June 8, 2004</h2>
+        <ul>
+            <li>Updated required minimum JRE to V1.4 in order to avoid many JRE bugs.</li>
+            <li>Improved integration with Mac OS X</li>
+        </ul>
+
+		<h2>Version 0.90 - November 11, 2003</h2>
+		<ul>
+		    <li>Fixed a bug that prevented the ability to select text in the output window.</li>
+        </ul>
+
+		<h2>Version 0.89 - October 23, 2003</h2>
+		<ul>
+            <li>Added input history support. The up arrow and down arrow will move through the
+                history list, depending on if the caret position is at the start or end of the
+                input buffer.</li>
+		    <li>Fixed focus issues so that control-tab will correctly move between components
+                on the screen. This allows the user to move between components without using
+                the mouse.</li>
+            <li>Updated the Help/About dialog to display Java Run-Time environment information.</li>
+		</ul>
+
+		<h2>Version 0.88 - August 14, 2003</h2>
+		<ul>
+		    <li>Added log, c_log Tcl commands to toggle logging. c_log takes an optional log file that
+		        will be used instead of the log file name currently configured in IcyBee's properties.</li>
+		    <li>Changed the tab history so that it should respond more naturally when used.</li>
+		    <li>Added c_hdel to remove a specific user from the tab history, and c_hclear to clear the
+		        entire tab history.</li>
+		    <li>Changed the properties dialog so that all of the property panels will be sized together in a
+		        more natural way.</li>
+		    <li>Fixed the /write command so that extremely long messages can be sent without error. The client
+		        will correctly split up the message into multiple packets for the server to handle correct.</li>
+		    <li>Newlines are now changed to spaces on input instead of being simply removed. This allows a paste
+		        of content to be formatted more naturally when it is sent.</li>
+		</ul>
+
+        <h2>Version 0.87 - March 30, 2003</h2>
+        <ul>
+            <li>Added cicb-compatiable TCL triggers: Trig_openmsg, Trig_personalmsg, Trig_arrivemsg, Trig_leavemsg,
+                Trig_bootmsg, Trig_dropmsg, Trig_errormsg, Trig_importantmsg, Trig_invitemsg</li>
+            <li>
+            <li>Fixed a bug that caused IcyBee to appear to hang and stop displaying any output.</li>
+            <li>Changed the devil emoticon from >:) to }:) yet again.</li>
+        </ul>
+
+        <h2>Version 0.86 - March 28, 2003</h2>
+        <ul>
+            <li>The color of the caret in the input window will now match the foreground color of
+                the text. This allows the caret to be visible even if the background is changed to
+                black.</li>
+            <li>The URL Grabber window will now stay closed if you close the window with the window
+                decorations (the "X" box) instead of using the View menu.</li>
+            <li>The Display/Text dialog will properly default to one of the text selection items so
+                that all buttons work and all values are correct.</li>
+            <li>Enabled the configuration of an alternative nickname. If the client detects that the
+                server disconnected you because your primary nickname was already in use, it will
+                retry once with the alternative nickname.</li>
+            <li>Fixed a bug that prevented the right-click menu option for Copy from working when the
+                text was selected right-to-left instead of left-to-right or by double-clicking on a
+                word.</li>
+            <li>The Close menu option of the Current Group tab is now disabled.</li>
+            <li>The Devil and Angel emoticons have been returned, but this time without animations.</li>
+        </ul>
+
+		<h2>Version 0.85 - January 24, 2003</h2>
+		<ul>
+			<li>Added the ability to click and right-click on a user's nick name. Clicking on the
+			    nick will add it to your input window, and right-clicking gives you several options.</li>
+			<li>Fixed a bug that prevented IcyBee from running on non 1.4 Java environments.</li>
+		</ul>
+		
+		<h2>Version 0.84 - January 24, 2003</h2>
+		<ul>
+			<li>Added a <i><b>URL Grabber</b></i> window that shows all URLs that have been received.
+			    URLs are organized into a tree by host name so they are easier to find. The window's
+			    visibility can be toggled from the <i><b>View</b></i> menu.</li>
+			<li>Fixed a bug that caused the application to resize whenever the Look & Feel was changed.</li>
+			<li>Added support to display timestamps for each message received. A variety of timestamp
+			    formats are supported.</li>
+			<li>Improved the layout and format of the preferences dialog.</li>
+			<li>Added the ability to toggle the network keep alive feature. When enabled, the time period
+			    between keep alive messages can be configured. The default is 5 minutes.</li>
+			<li>Enhanced text encoding property configuration to allow more choices than just UTF7.</li>
+			<li>Fixed bug that caused the toolbar and statusbar visibility to not be saved when the user
+			    changed them.</li>
+			<li>Words beginning with <i>www.</i> are now assumed to be URLs.</li>
+			<li>The idle and connected time in the statusbar are now displayed with a smaller format
+			    that does not include seconds.</li>
+		</ul>
+		
+		<h2>Version 0.83 - January 12, 2003</h2>
+		<ul>
+			<li>Added ability to change the application Look & Feel on the fly. Instead
+			    of being forced to use the standard Java Metal L&F, you can choose a native
+			    or other L&F.</li>
+			<li>Removed animated emoticons and limited current emoticons to just :) :D :P ;) and :(.</li>
+			<li>The tab history will now activate if text has been input without a command. This allows
+			    you to begin typing a message and activate the tab history without having to move the
+			    cursor back to the beginning of the message.</li>
+			<li>The focus of the application should now be restored to the currently selected input window,
+			    even if that window isn't the primary group window.</li>
+			<li>If the emoticon toolbar is used, the input focus is now returned to the proper input window.</li>
+			<li>Fixed a bug with the personal panels showing unformatted garbage text in the first line of
+			    the panel.</li>
+		</ul>
+		
+		<h2>Version 0.82 - January 9, 2003</h2>
+		<ul>
+			<li>Added a right-click popup context menu for the output panel with
+			    Copy and Select All options.</li>
+			<li>Added underlining of detected URLs in the output. In a future version,
+			    this will be a configurable text style.</li>
+			<li>Changed emoticons so that if the output containing an emoticon is
+			    selected and then copied, the ASCII text for the emoticon is copied
+			    into the clipboard buffer.</li>
+			<li>Changed the split between the output and input panels to be a user
+			    configurable split bar that allows resizing of the input window.</li>
+			<li>An Emoticons toolbar menu was added that provides a list of current
+			    emoticons and their text equivalents.</li>
+			<li>Added new emoticons: :spam:, :driving:, and :rolleyes:.</li>
+		</ul>
+		
+		<h2>Version 0.81 - January 9, 2003</h2>
+		<ul>
+			<li>Added resume of autoscrolling if the user moves the scrollback
+			    back to the end position.</li>
+			<li>The <i>What's New</i> page is now non-modal, so other client
+			    activity can continue when it is displayed.</li>
+		</ul>
+		
+		<h2>Version 0.80 - January 9, 2003</h2>
+		<ul>
+			<li>Scroll back finallly works as it should. You can safely select text 
+			    in the buffer without having the selection disappear if new data is
+			    added to the output panel. Control-P still toggles the scroll lock,
+			    but now the scroll will automatically lock if the user moves the 
+			    scroll slider back into the buffer.
+			<li>Animated emoticons should no longer consume excessive CPU and should
+			    consume almost none when no longer on screen.</li>
+			<li>Animated emoticons can now be disabled separately from normal static
+			    emoticons.</li>
+			<li>The <i>What's New</i> page is now available from the Help menu.</li>
+		</ul>
+				
+		<h2>Version 0.79 - January 6, 2003</h2>
+		<ul>
+			<li>Added new emoticons for :D, :-D, ]:), ]:-), 3:), 3:-). Changed >:) and >:-) to be }:) and }:-).
+			<li>Enabled support for Java Run-Time Environment 1.3 for users with
+			    older environments. User's are <b>STRONGLY</b> encouraged to upgrade
+			    to 1.4.1 as soon as possible for better performance and bug fixes.</li>
+		</ul>
+		
+		<h2>Version 0.78 - January 5, 2003</h2>
+		<ul>
+			<li>Fixed a bug where sending text in a personal message panel would not go to the
+			    specified user (bug added in 0.77).</li>
+			<li>Added support for existing emoticons to work if a nose is specified, too, i.e. :) and :-) will both work.</li>
+		</ul>
+		
+		<h2>Version 0.77 - January 5, 2003</h2>
+		<ul>
+			<li>The command prefix character can now be configured. See the <i>Scripting</i> tab
+			    of the <i>Properties</i> dialog for more information.</li>
+			<li>The tab for the current group will now display the actual group name.</li>
+			<li>Graphical Emoticons are now supported by default for the following ASCII smilies: :), ;), :P, >:), O:), and :U.
+			    This option can be toggled from the <i>Text</i> tab of the <i>Properties</i> dialog.</li>
+			<li>User tab history has been changed to work with all commands, not just personal messages.</li>
+			<li>Pausing of the scrollback buffer has been changed so that the Control-P key sequence will pause
+			    the output. The status bar will also indicate if the output is currently scroll locked or not.</li>
+			<li>The focus of the application will now default to the primary input window whenever the application
+			    is launched. It should also return to the input window whenever the application is activated (i.e. switched 
+			    to or restored).</li>
+		</ul>
+	</body>
+</html>

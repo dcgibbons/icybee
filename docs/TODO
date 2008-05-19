@@ -1,0 +1,41 @@
+###* if you change echoback in properties it doesn't change the server until you reconnect
+###* add bold/italic to font selection
+###* option to not allow personal messages to show up in current group window
+###* flash tab if an incoming message comes in
+###* make connection keep-alive an option
+###* Save on tab right-click menu does not work
+###* need option for password
+###* don't echoback /m Server messages
+###* See if ouptut pause can automatically be turned on when the window is scrolled back
+###* Implement UI for command prefix character.
+###* the color for /m is different between the to and from, should be the same
+###* make idle & connection timer have better output
+###* Redesign properties dialog to be a tree/dialog structure.
+###* Automatically drop existing user if already connected; INSTEAD - provided
+###  a way to specify an alternative nickname and reconnection process
+###* The Display/Text properties do not properly show the font, the font size, and enable the
+###  background button until a text option is selected. Make a selection by default to fix
+###  problem.
+###* right click for Copy does not work if you made the selection from right to left, only if
+###  you go left to right...
+###* don't let right-click menu on Current Group tab close that tab
+
+* optionally make separate windows MDI instead of tabs
+
+* option to search for messages from specific user in scrollback
+
+* Extend URL matcher to find multiple RegEx patterns for URLs
+
+* Implement UI for customizing URL RegEx patterns
+
+* Allow multiple user profiles to be selected easily
+
+* Add keyboard bindings list
+
+* Enhance scripting engine to allow interfaces to all variables, all bindings, etc.
+
+* Allow users to add new commands with custom .jar files
+
+* Add support for Mac OS X extensions that cause problems with quitting the app
+
+* If you use the connect toolbar to connect focus is not automatically set to the input bar.

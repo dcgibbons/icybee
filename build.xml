@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<project basedir="." default="dist" name="IcyBee">
+
+    <property name="Name" value="IcyBee"/>
+    <property name="name" value="icybee"/>
+
+    <property name="icb.home" value="."/>
+    <property name="src.dir" value="src"/>
+    <property name="docs.dir" value="docs"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="lib.dir" value="${build.dir}/lib"/>
+    <property name="bin.dir" value="${build.dir}/bin"/>
+    <property name="build.classes" value="${build.dir}/classes"/>
+    <property name="build.javadocs" value="${build.dir}/javadocs"/>
+    <property name="icb.dist.dir" value="${basedir}/dist"/>
+
+    <property name="build.compiler" value="modern"/>
+
+    <property name="packages" value="net.sourceforge.*"/>
+    <property name="manifest" value="src/etc/manifest"/>
+
+    <!-- =================================================================== -->
+    <!-- Prepares the build directory                                        -->
+    <!-- =================================================================== -->
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+        <tstamp/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Compiles the source code                                            -->
+    <!-- =================================================================== -->
+    <target depends="prepare" name="compile">
+        <mkdir dir="${build.classes}"/>
+        <mkdir dir="${build.classes}/images"/>
+        <mkdir dir="${build.classes}/help"/>
+
+        <javac classpath="${classpath}" 
+        		debug="on" 
+        		deprecation="on" 
+        		destdir="${build.classes}"
+        		target="1.4"
+                        source="1.4"
+        		optimize="on" 
+        		srcdir="${src.dir}">
+            <include name="**/*.java"/>
+            <classpath>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+
+        <copy todir="${build.classes}">
+            <fileset dir="${src.dir}/scripts">
+                <include name="**/*.tcl"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${build.classes}">
+            <fileset dir="${src.dir}/etc">
+                <include name="**/*.properties"/>
+                <exclude name="**/version.properties"/>
+            </fileset>
+        </copy>
+
+        <filter token="DATE" value="${TODAY}"/>
+        <filter token="TIME" value="${TSTAMP}"/>
+        <copy filtering="on" todir="${build.classes}">
+            <fileset dir="${src.dir}/etc">
+                <include name="**/version.properties"/>
+            </fileset>
+        </copy>
+        
+        <copy todir="${build.classes}/images">
+        	<fileset dir="${src.dir}/images">
+        		<include name="*.gif"/>
+                <include name="*.jpg"/>
+        	</fileset>
+        </copy>
+        
+        <copy todir="${build.classes}/help">
+        	<fileset dir="${src.dir}/help">
+        		<include name="*"/>
+        	</fileset>
+        </copy>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the jar archive                                             -->
+    <!-- =================================================================== -->
+    <target depends="compile" name="main">
+        <mkdir dir="${lib.dir}"/>
+        <jar basedir="${build.classes}"
+                jarfile="${lib.dir}/${name}.jar"
+                manifest="${manifest}"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the distribution                                            -->
+    <!-- =================================================================== -->
+    <target depends="main" name="dist">
+        <mkdir dir="${icb.dist.dir}"/>
+        <copy todir="${icb.dist.dir}">
+            <fileset dir="lib"/>
+            <fileset dir="${lib.dir}"/>
+        </copy>
+    </target>
+
+    <target depends="dist" name="sign">
+        <echo message="Be sure to define keystore and keystore.password properties."/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/${name}.jar" keystore="${keystore}" storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jacl.jar" keystore="${keystore}" storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jlfgr.jar" keystore="${keystore}" storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/tcljava.jar" keystore="${keystore}" storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jnlp.jar" keystore="${keystore}" storepass="${keystore.password}"/>
+    </target>
+
+    <!-- build admin -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${icb.dist.dir}"/>
+    </target>
+
+</project>

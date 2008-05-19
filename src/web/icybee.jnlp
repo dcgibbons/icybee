@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for IcyBee ICB client application -->
+<jnlp spec="1.0" codebase="http://www.nuclearbunny.org/icybee/" href="icybee.jnlp">
+  <information>
+    <title>IcyBee</title>
+    <vendor>The Nuclear Bunny</vendor>
+    <homepage href="index.html"/>
+    <description>IcyBee - An ICB Chat Network Client</description>
+    <offline-allowed/>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <j2se version="1.4+" />
+    <jar href="icybee.jar"/>
+    <jar href="jlfgr.jar"/>
+    <jar href="jacl.jar"/>
+    <jar href="tcljava.jar"/>
+    <jar href="oro.jar"/>
+    <jar href="jnlp.jar"/>
+  </resources>
+  <application-desc main-class="org.nuclearbunny.icybee.IcyBee"/>
+</jnlp>
