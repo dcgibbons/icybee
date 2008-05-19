@@ -21,21 +21,64 @@
 
 package org.nuclearbunny.icybee.protocol;
 
-public class ICBProtocol {
-    public static final Character PKT_LOGIN = new Character('a');
-    public static final Character PKT_OPEN = new Character('b');
-    public static final Character PKT_PERSONAL = new Character('c');
-    public static final Character PKT_STATUS = new Character('d');
-    public static final Character PKT_ERROR = new Character('e');
-    public static final Character PKT_IMPORTANT = new Character('f');
-    public static final Character PKT_EXIT = new Character('g');
-    public static final Character PKT_COMMAND = new Character('h');
-    public static final Character PKT_COMMAND_OUT = new Character('i');
-    public static final Character PKT_PROTOCOL = new Character('j');
-    public static final Character PKT_BEEP = new Character('k');
-    public static final Character PKT_PING = new Character('l');
-    public static final Character PKT_PONG = new Character('m');
-    public static final Character PKT_NOOP = new Character('n');
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collections;
+
+public enum ICBProtocol {
+    PKT_LOGIN('a'),
+    PKT_OPEN('b'),
+    PKT_PERSONAL('c'),
+    PKT_STATUS('d'),
+    PKT_ERROR('e'),
+    PKT_IMPORTANT('f'),
+    PKT_EXIT('g'),
+    PKT_COMMAND('h'),
+    PKT_COMMAND_OUT('i'),
+    PKT_PROTOCOL('j'),
+    PKT_BEEP('k'),
+    PKT_PING('l'),
+    PKT_PONG('m'),
+    PKT_NOOP('n');
+
+    public char getPacketType() {
+        return pktType;
+    }
+
+    private ICBProtocol(final char pktType) {
+        this.pktType = pktType;
+    }
+
+    private final char pktType;
+
+    public static ICBProtocol getPacketType(final String rawPacket) {
+        ICBProtocol packetType = PACKET_TYPES.get(rawPacket.charAt(0));
+        if (packetType == null) {
+            throw new IllegalArgumentException("invalid packet type");
+        }
+        return packetType;
+    }
+
+    private final static Map<Character, ICBProtocol> PACKET_TYPES;
+
+    static {
+        Map<Character, ICBProtocol> packetTypes = new HashMap<Character, ICBProtocol>();
+        packetTypes.put(PKT_LOGIN.getPacketType(), PKT_LOGIN);
+        packetTypes.put(PKT_OPEN.getPacketType(), PKT_OPEN);
+        packetTypes.put(PKT_PERSONAL.getPacketType(), PKT_PERSONAL);
+        packetTypes.put(PKT_STATUS.getPacketType(), PKT_STATUS);
+        packetTypes.put(PKT_ERROR.getPacketType(), PKT_ERROR);
+        packetTypes.put(PKT_IMPORTANT.getPacketType(), PKT_IMPORTANT);
+        packetTypes.put(PKT_EXIT.getPacketType(), PKT_EXIT);
+        packetTypes.put(PKT_COMMAND.getPacketType(), PKT_COMMAND);
+        packetTypes.put(PKT_COMMAND_OUT.getPacketType(), PKT_COMMAND_OUT);
+        packetTypes.put(PKT_PROTOCOL.getPacketType(), PKT_PROTOCOL);
+        packetTypes.put(PKT_BEEP.getPacketType(), PKT_BEEP);
+        packetTypes.put(PKT_PING.getPacketType(), PKT_PING);
+        packetTypes.put(PKT_PONG.getPacketType(), PKT_PONG);
+        packetTypes.put(PKT_NOOP.getPacketType(), PKT_NOOP);
+        PACKET_TYPES = Collections.unmodifiableMap(packetTypes);
+    }
 
     public static final int MAX_FIELDS = 20;
     public static final int MAX_PACKET_SIZE = 255;

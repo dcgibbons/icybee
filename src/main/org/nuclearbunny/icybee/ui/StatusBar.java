@@ -71,10 +71,10 @@ public class StatusBar extends JPanel implements StatusListener {
         pausedMessage = new JLabel(STATUSBAR_SCROLL_ON);
         pausedMessage.setBorder(bevelBorder);
 
-        idleMessage = new JLabel(MessageFormat.format(STATUSBAR_IDLE_TIME, new String[] { "0m" }));
+        idleMessage = new JLabel(MessageFormat.format(STATUSBAR_IDLE_TIME, "0m"));
         idleMessage.setBorder(bevelBorder);
 
-        elapsedMessage = new JLabel(MessageFormat.format(STATUSBAR_CONNECTED_TIME, new String[] { "0m" }));
+        elapsedMessage = new JLabel(MessageFormat.format(STATUSBAR_CONNECTED_TIME, "0m"));
         elapsedMessage.setBorder(bevelBorder);
 
         GridBagLayout layout = new GridBagLayout();
@@ -107,13 +107,12 @@ public class StatusBar extends JPanel implements StatusListener {
 
         timer = new javax.swing.Timer(StatusBar.TIMER_INTERVAL, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                long elapsedTime = (System.currentTimeMillis() - connectedTime) / 1000;
-                String[] args = { formatTime(elapsedTime) };
-                elapsedMessage.setText(MessageFormat.format(STATUSBAR_CONNECTED_TIME, args));
+                final long now = System.currentTimeMillis();
+                long elapsedTime = (now - connectedTime) / 1000;
+                elapsedMessage.setText(MessageFormat.format(STATUSBAR_CONNECTED_TIME, formatTime(elapsedTime)));
 
-                long idleTime = (System.currentTimeMillis() - client.getLastMessageSentAt()) / 1000;
-                args = new String[] { formatTime(idleTime) };
-                idleMessage.setText(MessageFormat.format(STATUSBAR_IDLE_TIME, args));
+                long idleTime = (now - client.getLastMessageSentAt()) / 1000;
+                idleMessage.setText(MessageFormat.format(STATUSBAR_IDLE_TIME, formatTime(idleTime)));
             }
         });
         timer.start();

@@ -477,7 +477,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
         public void actionPerformed(ActionEvent ect) {
             Frame parent = MainFrame.this;
             FileDialog dlg = new FileDialog(parent, "Open Tcl Script", FileDialog.LOAD);
-            dlg.show();
+            dlg.setVisible(true);
             File f = new File(dlg.getDirectory(), dlg.getFile());
 
             Cursor oldCursor = getCursor();
@@ -734,7 +734,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
             JDialog whatsnewDialog = new HtmlDialog(MainFrame.this, whatsnewURL);
             whatsnewDialog.setSize(400, 400); // XXX ack!
             whatsnewDialog.setLocationRelativeTo(MainFrame.this);
-            whatsnewDialog.show();
+            whatsnewDialog.setVisible(true);
 
             setCursor(oldCursor);
         }
@@ -753,7 +753,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
             JDialog dialog = new AboutDialog(MainFrame.this);
             dialog.setSize(500, 400);
             dialog.setLocationRelativeTo(MainFrame.this);
-            dialog.show();
+            dialog.setVisible(true);
 
             setCursor(oldCursor);
         }

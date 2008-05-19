@@ -47,12 +47,12 @@ public class OutputLogger implements MessageListener {
         this.client = client;
         output = new PrintStream(new FileOutputStream(logFileName, append), true);
         output.println();
-        output.println(MessageFormat.format(LOGGING_START, new String[] { sdf.format(new Date()) }));
+        output.println(MessageFormat.format(LOGGING_START, sdf.format(new Date())));
     }
 
     public void close() {
         output.println();
-        output.println(MessageFormat.format(LOGGING_STOP, new String[] { sdf.format(new Date()) } ));
+        output.println(MessageFormat.format(LOGGING_STOP, sdf.format(new Date())));
         output.flush();
         output = null;
     }
@@ -113,15 +113,15 @@ public class OutputLogger implements MessageListener {
     }
 
     public void displayOpenPacket(OpenPacket p) {
-        output.println(MessageFormat.format(LOGGING_OPEN_MSG, new String[] { p.getNick(), p.getText() }));
+        output.println(MessageFormat.format(LOGGING_OPEN_MSG, p.getNick(), p.getText()));
     }
 
     public void displayPersonalPacket(PersonalPacket p) {
-        output.println(MessageFormat.format(LOGGING_PERSONAL_MSG, new String[] { p.getNick(), p.getText() }));
+        output.println(MessageFormat.format(LOGGING_PERSONAL_MSG, p.getNick(), p.getText()));
     }
 
     public void displayStatusPacket(StatusPacket p) {
-        output.println(MessageFormat.format(LOGGING_STATUS_MSG, new String[] { p.getStatusHeader(), p.getStatusText() }));
+        output.println(MessageFormat.format(LOGGING_STATUS_MSG, p.getStatusHeader(), p.getStatusText()));
     }
 
     public void displayCommandOutputPacket(CommandOutputPacket p) {
@@ -129,15 +129,15 @@ public class OutputLogger implements MessageListener {
     }
 
     public void displayBeepPacket(BeepPacket p) {
-        output.println(MessageFormat.format(LOGGING_BEEP_MSG, new String[] { p.getNick() }));
+        output.println(MessageFormat.format(LOGGING_BEEP_MSG, p.getNick()));
     }
 
     public void displayProtocolPacket(ProtocolPacket p) {
-        output.println(MessageFormat.format(LOGGING_CONNECTED_MSG, new String[] { p.getServerName(), p.getServerDesc() }));
+        output.println(MessageFormat.format(LOGGING_CONNECTED_MSG, p.getServerName(), p.getServerDesc()));
     }
 
     public void displayErrorMessage(String msg) {
-        output.println(MessageFormat.format(LOGGING_ERROR_MSG, new String[] { msg } ));
+        output.println(MessageFormat.format(LOGGING_ERROR_MSG, msg));
     }
 
     public void displayExitPacket(ExitPacket p) {
@@ -159,12 +159,12 @@ public class OutputLogger implements MessageListener {
             String nick = args[0];
             String text = p.toString();
 
-            output.println(MessageFormat.format(LOGGING_PERSONAL_MSG, new String[] { nick, text }));
+            output.println(MessageFormat.format(LOGGING_PERSONAL_MSG, nick, text));
         }
     }
 
     // TODO: this is one of those hacks I put in here to deal with c_print...
     private void displayPrintMessage(PrintPacket p) {
-        output.println(MessageFormat.format(LOGGING_PRINT_MESSAGE, new String[] { p.toString() } ));
+        output.println(MessageFormat.format(LOGGING_PRINT_MESSAGE, p.toString()));
     }
 }

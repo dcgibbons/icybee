@@ -553,7 +553,7 @@ public class ICBClient implements Client {
      */
     public void sendPacket(String msg) {
         try {
-            if (msg.charAt(0) != ICBProtocol.PKT_NOOP.charValue()) {
+            if (msg.charAt(0) != ICBProtocol.PKT_NOOP.getPacketType()) {
                 lastMessageSentAt = System.currentTimeMillis();
             }
 

@@ -44,14 +44,14 @@ public class Packet {
     /**
      * Determines the type of packet this object represents.
      */
-    public Character getPacketType() {
+    public ICBProtocol getPacketType() {
         return type;
     }
 
     /**
      * Sets the type of packet this object represents.
      */
-    public void setPacketType(Character type) {
+    public void setPacketType(ICBProtocol type) {
         this.type = type;
     }
 
@@ -133,14 +133,14 @@ public class Packet {
      */
     protected void init(int from, String rawPacket) throws ProtocolException {
         this.rawPacket = rawPacket;
-        this.type = new Character(rawPacket.charAt(0)); // XXX be more careful?
+        this.type = ICBProtocol.getPacketType(rawPacket);
         StringTokenizer st = new StringTokenizer(rawPacket.substring(1), "\000\001");
         while (st.hasMoreTokens()) {
             fields.add(st.nextToken());
         }
     }
 
-    private Character type;
+    private ICBProtocol type;
     private ArrayList fields = new ArrayList(ICBProtocol.MAX_FIELDS);
     private String rawPacket;
 
