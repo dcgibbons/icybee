@@ -23,6 +23,7 @@ package org.nuclearbunny.icybee.ui;
 
 import org.nuclearbunny.icybee.ICBClient;
 import org.nuclearbunny.icybee.net.URLShrinker;
+import org.nuclearbunny.icybee.net.impl.BitlyImpl;
 import org.nuclearbunny.util.URLMatcher;
 
 import javax.swing.*;
@@ -64,7 +65,7 @@ class InputTextPane extends JTextArea {
 
         theClient = client;
         thePanel = clientPanel;
-        urlShrinker = new org.nuclearbunny.icybee.net.impl.TinyURLImpl(); // TODO: pick based on preferences
+        urlShrinker = new BitlyImpl(); // TODO: pick based on preferences
         inputHistory = new ArrayList(InputTextPane.INPUT_HISTORY_SIZE);
         inputHistoryIndex = 0;
 
