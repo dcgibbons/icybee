@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,21 @@
 
 package org.nuclearbunny.icybee.ui;
 
-import org.nuclearbunny.util.BrowserControl;
-import org.nuclearbunny.icybee.ui.util.JDialogHelper;
 import org.nuclearbunny.icybee.ui.util.ActionHelper;
+import org.nuclearbunny.icybee.ui.util.JDialogHelper;
+import org.nuclearbunny.util.BrowserControl;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.net.*;
-import java.io.*;
-import java.text.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
+import javax.swing.border.Border;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.io.IOException;
+import java.net.URL;
+import java.text.MessageFormat;
 
 public class HtmlDialog extends JDialogHelper {
     private static final Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
@@ -103,7 +106,7 @@ public class HtmlDialog extends JDialogHelper {
                                 Object[] args = {url.toExternalForm()};
                                 String errorMsg = MessageFormat.format(errorMsgDesc, args);
                                 JOptionPane.showMessageDialog(HtmlDialog.this.getOwner(), errorMsg,
-                                                              errorMsgTitle, JOptionPane.ERROR_MESSAGE);
+                                        errorMsgTitle, JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     }

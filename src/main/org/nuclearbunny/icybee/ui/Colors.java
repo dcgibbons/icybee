@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,14 +22,15 @@
 package org.nuclearbunny.icybee.ui;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Colors {
     public final String name;
     public final Color defaultColor;
     public Color color;
 
-    private Colors(String name, Color defaultColor) { 
+    private Colors(String name, Color defaultColor) {
         this.name = name;
         this.defaultColor = defaultColor;
         color = defaultColor;
@@ -62,7 +63,7 @@ public class Colors {
     public static final Colors STATUS_TEXT = new Colors("Status Text", Color.black);
 
     private static final Colors[] PRIVATE_VALUES = {
-        BACKGROUND, OPEN_TEXT, OPEN_NICK, PERSONAL_TEXT, PERSONAL_NICK, COMMAND_TEXT, ERROR_TEXT, STATUS_HEADER, STATUS_TEXT
+            BACKGROUND, OPEN_TEXT, OPEN_NICK, PERSONAL_TEXT, PERSONAL_NICK, COMMAND_TEXT, ERROR_TEXT, STATUS_HEADER, STATUS_TEXT
     };
 
     public static final java.util.List VALUES = Collections.unmodifiableList(Arrays.asList(PRIVATE_VALUES));

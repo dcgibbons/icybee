@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,15 @@
 
 package org.nuclearbunny.icybee.commands;
 
-import org.nuclearbunny.icybee.*;
-import org.nuclearbunny.icybee.protocol.*;
+import org.nuclearbunny.icybee.Client;
+import org.nuclearbunny.icybee.protocol.PrintPacket;
+import tcl.lang.Command;
+import tcl.lang.Interp;
+import tcl.lang.TclException;
+import tcl.lang.TclObject;
 
-import java.text.*;
-import java.util.*;
-import tcl.lang.*;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class ClientTimeCommand implements Command {
     private Client client;

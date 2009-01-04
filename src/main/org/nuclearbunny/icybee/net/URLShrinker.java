@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@ public interface URLShrinker {
     /**
      * This method returns the minimum length a URL should be before this
      * URL shrinking service is used.
+     *
      * @return the minimum URL length that should be sent to this
      *         implementation
      */
@@ -48,7 +49,7 @@ public interface URLShrinker {
      * @param url the original URL text
      * @return the translated URL
      * @throws IOException if any error occurs while communicating to the URL
-     *         shrinking service
+     *                     shrinking service
      */
     public String shrinkURL(String url) throws IOException;
 }

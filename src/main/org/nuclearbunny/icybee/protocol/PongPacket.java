@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,7 @@
 
 package org.nuclearbunny.icybee.protocol;
 
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
+import java.net.ProtocolException;
 
 
 public class PongPacket extends Packet {
@@ -31,7 +29,7 @@ public class PongPacket extends Packet {
         setPacketType(ICBProtocol.PKT_PONG);
     }
 
-    public PongPacket(String rawPacket) throws ProtocolException {
-        init(Packet.SERVER, rawPacket);
+    public PongPacket(final String rawPacket) throws ProtocolException {
+        super(rawPacket);
     }
 }

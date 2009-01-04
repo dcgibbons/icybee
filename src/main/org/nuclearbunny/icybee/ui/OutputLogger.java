@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,18 @@
 
 package org.nuclearbunny.icybee.ui;
 
-import org.nuclearbunny.icybee.*;
+import org.nuclearbunny.icybee.ICBClient;
+import org.nuclearbunny.icybee.MessageEvent;
+import org.nuclearbunny.icybee.MessageListener;
 import org.nuclearbunny.icybee.protocol.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class OutputLogger implements MessageListener {
     private static final SimpleDateFormat sdf = new SimpleDateFormat(UIMessages.messages.getString(UIMessages.LOGGING_TIME_FORMAT));

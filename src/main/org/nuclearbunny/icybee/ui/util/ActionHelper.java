@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,7 @@
 
 package org.nuclearbunny.icybee.ui.util;
 
-import javax.swing.Action;
-import javax.swing.AbstractAction;
+import javax.swing.*;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -30,8 +29,8 @@ import java.util.ResourceBundle;
  * This extension of AbstractAction will load various textual properties of
  * the Action from the specified ResourceBundle using the specified prefix.
  *
- * @see Action
  * @author David C. Gibbons
+ * @see Action
  */
 public abstract class ActionHelper extends AbstractAction {
     public ActionHelper(ResourceBundle resources, String resourcePrefix) {
@@ -68,7 +67,7 @@ public abstract class ActionHelper extends AbstractAction {
 
     private Integer getKeyCode(char aChar) {
         int vk = (int) aChar;
-        if(vk >= 'a' && vk <='z')
+        if (vk >= 'a' && vk <= 'z')
             vk -= ('a' - 'A');
         return new Integer(vk);
     }

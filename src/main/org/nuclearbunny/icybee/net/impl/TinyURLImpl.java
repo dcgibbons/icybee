@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,10 @@ package org.nuclearbunny.icybee.net.impl;
 
 import org.nuclearbunny.icybee.net.URLShrinker;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -34,7 +34,7 @@ import java.net.URLConnection;
  * The <code>TinyURLImpl</code> class provides URL shrinking functionality
  * using the TinyURL service found at
  * <a href="http://www.tinyurl.com">http://www.tinyurl.com/</a>
- *
+ * <p/>
  * Since TinyURL does not provide an API, this implementation uses HTML
  * "scraping" in order to retrieve the translated URL. This implementation
  * is likely to break anytime the TinyURL service changes the way it generates
@@ -81,11 +81,11 @@ public class TinyURLImpl implements URLShrinker {
                     if (newURL.charAt(start) == '"')
                         break;
                 }
-                for (end = start+1; end < n; end++) {
+                for (end = start + 1; end < n; end++) {
                     if (newURL.charAt(end) == '"')
                         break;
                 }
-                newURL = newURL.substring(start+1, end-start);
+                newURL = newURL.substring(start + 1, end - start);
                 break;
             }
         }

@@ -3,7 +3,7 @@ rem
 rem IcyBee - http://www.nuclearbunny.org/icybee/
 rem A client for the Internet CB Network - http://www.icb.net/
 rem
-rem Copyright (C) 2000-2008 David C. Gibbons
+rem Copyright (C) 2000-2009 David C. Gibbons
 rem
 rem This program is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU General Public License

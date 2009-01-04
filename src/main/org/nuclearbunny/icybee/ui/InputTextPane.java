@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,17 +21,21 @@
 
 package org.nuclearbunny.icybee.ui;
 
-import org.nuclearbunny.icybee.*;
-import org.nuclearbunny.icybee.net.*;
+import org.nuclearbunny.icybee.ICBClient;
+import org.nuclearbunny.icybee.net.URLShrinker;
 import org.nuclearbunny.util.URLMatcher;
 
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Position;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.text.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class InputTextPane extends JTextArea {
     private static final int INPUT_TEXT_ROWS = 2;

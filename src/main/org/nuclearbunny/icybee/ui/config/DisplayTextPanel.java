@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,10 @@ package org.nuclearbunny.icybee.ui.config;
 
 import org.nuclearbunny.icybee.ui.FontUtility;
 import org.nuclearbunny.icybee.ui.UIMessages;
-import org.nuclearbunny.icybee.ui.util.*;
+import org.nuclearbunny.icybee.ui.util.ActionHelper;
+import org.nuclearbunny.icybee.ui.util.JCheckBoxHelper;
+import org.nuclearbunny.icybee.ui.util.JComboBoxHelper;
+import org.nuclearbunny.icybee.ui.util.JListHelper;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -31,8 +34,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 class DisplayTextPanel extends JPanel {
     private final static Border EMPTY_BORDER = BorderFactory.createEmptyBorder(5, 5, 5, 5);
@@ -186,16 +195,14 @@ class DisplayTextPanel extends JPanel {
         samplePanel.setBorder(BorderFactory.createCompoundBorder(
                 EMPTY_BORDER, BorderFactory.createLineBorder(Color.black)));
 
-
         // create the sub-pane to show the list of available text items
         JScrollPane scrollPane = new JScrollPane(screenElementList,
-                                                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                                                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         JLabel screenElementLabel = ((JListHelper) screenElementList).getDefaultLabel();
         JPanel screenElementPane = new JPanel(new BorderLayout());
         screenElementPane.add(screenElementLabel, BorderLayout.NORTH);
         screenElementPane.add(scrollPane, BorderLayout.CENTER);
-
 
         // create the font items pane
         JPanel labelsPane = new JPanel(new GridLayout(2, 0));
@@ -233,7 +240,6 @@ class DisplayTextPanel extends JPanel {
         fontItemsPane3.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder(UIMessages.PROPERTIES_DISPLAY_TEXT_COMMON_TEXT_TITLE),
                 fontItemsPane3.getBorder()));
-
 
         // create the style options pane
         JPanel styleOptionsPane = new JPanel(new BorderLayout());
@@ -409,8 +415,8 @@ class DisplayTextPanel extends JPanel {
             int n = screenElementList.getSelectedIndex();
             if (n != -1) {
                 Color newColor = JColorChooser.showDialog(DisplayTextPanel.this,
-                                                          UIMessages.CHOOSE_BACKGROUND_TITLE,
-                                                          sampleTextLabel.getBackground());
+                        UIMessages.CHOOSE_BACKGROUND_TITLE,
+                        sampleTextLabel.getBackground());
                 if (newColor != null) {
                     setBackgroundColor(newColor);
                 }
@@ -427,8 +433,8 @@ class DisplayTextPanel extends JPanel {
             int n = screenElementList.getSelectedIndex();
             if (n != -1) {
                 Color newColor = JColorChooser.showDialog(DisplayTextPanel.this,
-                                                          UIMessages.CHOOSE_FOREGROUND_TITLE,
-                                                          sampleTextLabel.getForeground());
+                        UIMessages.CHOOSE_FOREGROUND_TITLE,
+                        sampleTextLabel.getForeground());
                 if (newColor != null) {
                     setForegroundColor(newColor);
                 }

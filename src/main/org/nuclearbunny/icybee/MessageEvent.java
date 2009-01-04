@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,9 @@
 
 package org.nuclearbunny.icybee;
 
-import java.util.*;
+import org.nuclearbunny.icybee.protocol.Packet;
 
-import org.nuclearbunny.icybee.protocol.*;
+import java.util.EventObject;
 
 public class MessageEvent extends EventObject {
     public MessageEvent(Object src, Packet packet) {
@@ -34,6 +34,7 @@ public class MessageEvent extends EventObject {
     public Packet getPacket() {
         return packet;
     }
+
     public void setPacket(Packet packet) {
         this.packet = packet;
     }

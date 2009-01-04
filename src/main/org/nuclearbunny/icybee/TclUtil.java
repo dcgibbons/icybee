@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,13 @@
 package org.nuclearbunny.icybee;
 
 import org.nuclearbunny.icybee.commands.*;
-import tcl.lang.*;
-import java.io.*;
+import tcl.lang.Interp;
+import tcl.lang.TclException;
+import tcl.lang.TclObject;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class TclUtil {
     private Interp interp = new Interp();
@@ -115,7 +120,7 @@ public class TclUtil {
             int offset = 0;
             int readLen;
             while (num > 0) {
-                readLen = stream.read( byteArray, offset, num );
+                readLen = stream.read(byteArray, offset, num);
                 offset += readLen;
                 num -= readLen;
             }
@@ -131,7 +136,7 @@ public class TclUtil {
         }
     }
 
-    public void evalFile(String fileName) throws TclException  {
+    public void evalFile(String fileName) throws TclException {
         InputStream stream = null;
 
         try {
@@ -146,7 +151,7 @@ public class TclUtil {
             int offset = 0;
             int readLen;
             while (num > 0) {
-                readLen = stream.read( byteArray, offset, num );
+                readLen = stream.read(byteArray, offset, num);
                 offset += readLen;
                 num -= readLen;
             }
@@ -173,10 +178,14 @@ public class TclUtil {
             for (int i = 0, n = cmd.length(); i < n; i++) {
                 c = cmd.charAt(i);
                 switch (c) {
-                    case '{': case '}':
-                    case '[': case ']':
-                    case '"': case ';':
-                    case '$': case '\\':
+                    case '{':
+                    case '}':
+                    case '[':
+                    case ']':
+                    case '"':
+                    case ';':
+                    case '$':
+                    case '\\':
                         buf.append('\\').append(c);
                         break;
                     default:

@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,19 +21,24 @@
 
 package org.nuclearbunny.icybee.ui;
 
-import java.util.*;
+import javax.swing.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import javax.swing.*;
 
 public class IconManager {
     private static IconManager theInstance = null;
     private Pattern emoticonPattern;
-    private LinkedList emoticonList;
-    private HashMap emoticonMap;
+    private LinkedList<Emoticon> emoticonList;
+    private HashMap<String, Emoticon> emoticonMap;
 
     /**
      * Retrieves an reference to the global <code>IconManager</code> object.
+     *
+     * @return the single instance of <code>IconManager</code>
      */
     public static synchronized IconManager getInstance() {
         if (theInstance == null) {
@@ -50,8 +55,8 @@ public class IconManager {
      * for a wink, etc.
      */
     private IconManager() {
-        emoticonList = new LinkedList();
-        emoticonMap = new HashMap();
+        emoticonList = new LinkedList<Emoticon>();
+        emoticonMap = new HashMap<String, Emoticon>();
 
         addEmoticon("}:)", "Devil", "images/devil.gif");
         addEmoticon("O:)", "Angel", "images/angel.gif");
@@ -63,10 +68,7 @@ public class IconManager {
 
         StringBuffer patternBuffer = new StringBuffer("(");
         boolean previousEmoticon = false;
-        Iterator emoticonIterator = emoticonList.iterator();
-        while (emoticonIterator.hasNext()) {
-            Emoticon emoticon = (Emoticon) emoticonIterator.next();
-
+        for (Emoticon emoticon : emoticonList) {
             if (previousEmoticon) {
                 patternBuffer.append('|');
             }
@@ -91,6 +93,7 @@ public class IconManager {
      * Returns a Perl5 compatible <code>Pattern</code> that allows searching
      * for emoticons in a text string.
      *
+     * @return the compiled regular expression pattern for all icons
      * @see Pattern
      */
     public Pattern getPattern() {
@@ -98,9 +101,10 @@ public class IconManager {
     }
 
     /**
-     * Returns a <code>List</code> containing all of the <code>Emoticons
+     * Returns a <code>List</code> containing all of the <code>Emoticons</code>
      * configured.
      *
+     * @return a List object containing all of the emoticons
      * @see IconManager.Emoticon
      * @see java.util.List
      */
@@ -143,9 +147,12 @@ public class IconManager {
     /**
      * Convert an input string to one escaped to work with the
      * regular expression compiler.
+     *
+     * @param source the source string
+     * @return a new string with proper escaping added
      */
     private String escapeString(String source) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer(source.length() * 2);
         for (int i = 0, n = source.length(); i < n; i++) {
             char c = source.charAt(i);
             // XXX this is an incomplete escape list

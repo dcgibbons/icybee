@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,20 +35,20 @@ class DisplayPanel extends JPanel {
     private Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 
     private static final BufferSize[] defaultSizeValues = {
-        new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 1000),
-        new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 2500),
-        new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 5000),
-        new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 10000)
+            new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 1000),
+            new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 2500),
+            new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 5000),
+            new BufferSize(UIMessages.PROPERTIES_DISPLAY_BUFFER_SIZE_1000_LINES, 10000)
     };
 
     // TODO: these values should be placed in the resource bundle, as well
     private static final String[] formatData = {
-        "HH:mm",
-        "HH:mm:ss",
-        "hh:mm",
-        "hh:mm:ss",
-        "hh:mm aa",
-        "hh:mm:ss aa"
+            "HH:mm",
+            "HH:mm:ss",
+            "hh:mm",
+            "hh:mm:ss",
+            "hh:mm aa",
+            "hh:mm:ss aa"
     };
 
     private JPanel displayInfoPanel;

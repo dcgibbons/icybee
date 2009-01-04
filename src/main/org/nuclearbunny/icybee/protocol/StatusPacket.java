@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,12 @@
 
 package org.nuclearbunny.icybee.protocol;
 
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
+import java.net.ProtocolException;
 
 
 public class StatusPacket extends Packet {
-    public StatusPacket(String rawPacket) throws ProtocolException {
-        init(Packet.SERVER, rawPacket);
+    public StatusPacket(final String rawPacket) throws ProtocolException {
+        super(rawPacket);
     }
 
     public String getStatusHeader() {
@@ -36,7 +34,6 @@ public class StatusPacket extends Packet {
     }
 
     public String getStatusText() {
-    	String statusText = getField(1);
-        return statusText;
+        return getField(1);
     }
 }

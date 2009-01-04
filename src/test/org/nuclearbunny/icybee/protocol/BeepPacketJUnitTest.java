@@ -21,14 +21,14 @@
 
 package org.nuclearbunny.icybee.protocol;
 
+import junit.framework.TestCase;
+
 import java.net.ProtocolException;
 
-public class BeepPacket extends Packet {
-    public BeepPacket(final String rawPacket) throws ProtocolException {
-        super(rawPacket);
-    }
-
-    public String getNick() {
-        return getField(0);
+public class BeepPacketJUnitTest extends TestCase {
+    public void testBeepPacket() throws ProtocolException {
+        String rawPacket = ICBProtocol.PKT_BEEP.getPacketType() + "just testing\000";
+        BeepPacket bp = (BeepPacket) Packet.getInstance(rawPacket);
+        assertEquals("just testing", bp.getNick());
     }
 }

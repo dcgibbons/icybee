@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,13 @@
 
 package org.nuclearbunny.icybee.ui;
 
+import javax.swing.text.AttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
-import javax.swing.text.*;
 
 public class FontUtility {
     public static Font getFont(AttributeSet a) {
-         // build a new font encoding in the form of "fontfamily-style-size"
+        // build a new font encoding in the form of "fontfamily-style-size"
         StringBuffer buffer = new StringBuffer(StyleConstants.getFontFamily(a));
         buffer.append('-');
         if (StyleConstants.isBold(a)) {

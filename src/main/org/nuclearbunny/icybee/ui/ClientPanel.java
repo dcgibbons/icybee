@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,19 +21,27 @@
 
 package org.nuclearbunny.icybee.ui;
 
-import org.nuclearbunny.icybee.*;
+import org.nuclearbunny.icybee.ICBClient;
+import org.nuclearbunny.icybee.MessageEvent;
+import org.nuclearbunny.icybee.MessageListener;
 import org.nuclearbunny.icybee.protocol.*;
-import org.nuclearbunny.util.*;
+import org.nuclearbunny.util.BrowserControl;
+import org.nuclearbunny.util.URLMatcher;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.text.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ClientPanel extends JPanel implements MessageListener {
     public static final String TEXT_OPEN = "text.open";
@@ -80,7 +88,7 @@ public class ClientPanel extends JPanel implements MessageListener {
         this.client = theClient;
 
         clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        
+
         /* create the output area */
         document = new DefaultStyledDocument();
 
@@ -372,7 +380,8 @@ public class ClientPanel extends JPanel implements MessageListener {
 
     /**
      * Displays text, taking into account any URLs embedded in the text string.
-     * @param text text buffer to add to the client panel
+     *
+     * @param text      text buffer to add to the client panel
      * @param textStyle text style to use when displaying text
      * @throws BadLocationException
      */

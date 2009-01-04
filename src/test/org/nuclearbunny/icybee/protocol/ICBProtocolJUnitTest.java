@@ -21,14 +21,27 @@
 
 package org.nuclearbunny.icybee.protocol;
 
-import java.net.ProtocolException;
+import junit.framework.TestCase;
 
-public class BeepPacket extends Packet {
-    public BeepPacket(final String rawPacket) throws ProtocolException {
-        super(rawPacket);
+public class ICBProtocolJUnitTest extends TestCase {
+    public void testInvalidPacket() {
+        try {
+            ICBProtocol.getPacketType("z");
+            assertFalse("ICBProtocol.getPacketType did not throw expected exception", true);
+        } catch (IllegalArgumentException ex) {
+            // NO-OP - test successful
+            assertNotNull(ex);
+        }
     }
 
-    public String getNick() {
-        return getField(0);
+    public void testValidPacketTypes() {
+        for (char pt = 'a'; pt < 'o'; pt++) {
+            assertNotNull(ICBProtocol.getPacketType(new String(new char[]{pt})));
+        }
+    }
+
+    public void testBasics() {
+        ICBProtocol pktType = ICBProtocol.PKT_LOGIN;
+        assertEquals("PKT_LOGIN should be equal to 'a'", pktType.getPacketType(), 'a');
     }
 }

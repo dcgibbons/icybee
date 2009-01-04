@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ public class URLMatcher {
 
     /**
      * Attempts to convert the specified string into a valid URL object.
+     *
      * @param candidate
      * @return a valid URL, or <code>null</code> if the candidate was not valid
      */

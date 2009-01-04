@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,22 +22,27 @@
 package org.nuclearbunny.icybee.ui;
 
 import org.nuclearbunny.icybee.*;
-import org.nuclearbunny.icybee.ui.macosx.MacOSXIntegrator;
 import org.nuclearbunny.icybee.protocol.*;
-import org.nuclearbunny.util.*;
-
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import org.nuclearbunny.icybee.ui.macosx.MacOSXIntegrator;
+import org.nuclearbunny.util.BrowserControl;
 
 import javax.swing.*;
-import javax.swing.plaf.*;
+import javax.swing.plaf.TabbedPaneUI;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainFrame extends JFrame implements ActionListener, WindowListener {
     private static final int SHORTCUT_KEY_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -844,7 +849,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
                             }
                         }
                     }
-
 
                     // always route packets to the main panel
                     // TODO: check option and don't display to main panel if personal message

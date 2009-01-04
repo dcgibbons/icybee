@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,23 @@
 
 package org.nuclearbunny.icybee;
 
-import java.util.*;
+import java.util.EventListener;
+import java.util.EventObject;
 
 public interface StatusListener extends EventListener {
     void statusConnecting(EventObject e);
+
     void statusConnected(EventObject e);
+
     void statusDisconnecting(EventObject e);
+
     void statusDisconnected(EventObject e);
+
     void statusLoggingStarted(EventObject e);
+
     void statusLoggingStopped(EventObject e);
+
     void statusOutputPaused(EventObject e);
+
     void statusOutputUnpaused(EventObject e);
 }

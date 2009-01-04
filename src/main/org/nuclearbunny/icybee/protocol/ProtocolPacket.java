@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,25 +21,23 @@
 
 package org.nuclearbunny.icybee.protocol;
 
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
+import java.net.ProtocolException;
 
 
 public class ProtocolPacket extends Packet {
-    public ProtocolPacket(String rawPacket) throws ProtocolException {
-        init(Packet.SERVER, rawPacket);
+    public ProtocolPacket(final String rawPacket) throws ProtocolException {
+        super(rawPacket);
     }
 
     public int getProtocolLevel() {
-        return Integer.parseInt((String) getField(0));
+        return Integer.parseInt(getField(0));
     }
 
     public String getServerName() {
-        return (String) getField(1);
+        return getField(1);
     }
 
     public String getServerDesc() {
-        return (String) getField(2);
+        return getField(2);
     }
 }

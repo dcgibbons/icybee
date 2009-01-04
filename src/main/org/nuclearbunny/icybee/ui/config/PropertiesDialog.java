@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,23 @@
 
 package org.nuclearbunny.icybee.ui.config;
 
-import org.nuclearbunny.icybee.*;
+import org.nuclearbunny.icybee.ICBProperties;
 import org.nuclearbunny.icybee.ui.ClientPanel;
 import org.nuclearbunny.icybee.ui.UIMessages;
 import org.nuclearbunny.icybee.ui.util.ActionHelper;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import javax.swing.text.*;
+import javax.swing.border.Border;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.Style;
+import javax.swing.text.StyleContext;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class PropertiesDialog extends JDialog {
     private static final Border EMPTY_BORDER = BorderFactory.createEmptyBorder(5, 5, 5, 5);
@@ -128,7 +133,7 @@ public class PropertiesDialog extends JDialog {
         tree.setRootVisible(false);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         for (int i = 0, n = tree.getRowCount(); i < n; i++) {
-	        tree.expandRow(i);
+            tree.expandRow(i);
         }
 
         emptyPanel = new JPanel();
@@ -159,7 +164,7 @@ public class PropertiesDialog extends JDialog {
         JScrollPane treeView = new JScrollPane(tree);
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.
                         getLastSelectedPathComponent();
                 if (node == null)
                     return;
@@ -207,23 +212,23 @@ public class PropertiesDialog extends JDialog {
     private void loadValues() {
         connectPanel.setServers(props.getServers());
         connectPanel.setDefaultServer(props.getDefaultServer());
-    	connectPanel.setUserName(props.getUserID());
-    	connectPanel.setNickName(props.getUserNick());
-    	connectPanel.setAlternativeNickName(props.getUserAlternativeNick());
-    	connectPanel.setGroupName(props.getUserGroup());
-    	connectPanel.setPassword(props.getUserPassword());
+        connectPanel.setUserName(props.getUserID());
+        connectPanel.setNickName(props.getUserNick());
+        connectPanel.setAlternativeNickName(props.getUserAlternativeNick());
+        connectPanel.setGroupName(props.getUserGroup());
+        connectPanel.setPassword(props.getUserPassword());
 
-    	connectOptionsPanel.setConnectOnStartup(props.getAutoConnect());
-    	connectOptionsPanel.setKeepConnectionAlive(props.isKeepConnectionAliveEnabled());
-    	connectOptionsPanel.setKeepConnectionAliveInterval(props.getKeepConnectionAliveInterval());
-    	connectOptionsPanel.setEchoback(props.getEchoback());
+        connectOptionsPanel.setConnectOnStartup(props.getAutoConnect());
+        connectOptionsPanel.setKeepConnectionAlive(props.isKeepConnectionAliveEnabled());
+        connectOptionsPanel.setKeepConnectionAliveInterval(props.getKeepConnectionAliveInterval());
+        connectOptionsPanel.setEchoback(props.getEchoback());
 
-    	displayPanel.setLimitDisplaySizeEnabled(props.isDisplaySizeLimited());
-    	displayPanel.setSizeLimit(props.getDisplaySizeLimit());
-    	displayPanel.setEmoticonsEnabled(props.areEmoticonsEnabled());
-    	displayPanel.setAnimatedEmoticonsEnabled(props.areAnimatedEmoticonsEnabled());
-    	displayPanel.setMessageTimestampsEnabled(props.areMessageTimestampsEnabled());
-    	displayPanel.setMessageTimestampsFormat(props.getMessageTimestampsFormat());
+        displayPanel.setLimitDisplaySizeEnabled(props.isDisplaySizeLimited());
+        displayPanel.setSizeLimit(props.getDisplaySizeLimit());
+        displayPanel.setEmoticonsEnabled(props.areEmoticonsEnabled());
+        displayPanel.setAnimatedEmoticonsEnabled(props.areAnimatedEmoticonsEnabled());
+        displayPanel.setMessageTimestampsEnabled(props.areMessageTimestampsEnabled());
+        displayPanel.setMessageTimestampsFormat(props.getMessageTimestampsFormat());
 
         displayTextPanel.addStyle(props.getTextStyle(ClientPanel.TEXT_OPEN));
         displayTextPanel.addStyle(props.getTextStyle(ClientPanel.TEXT_OPEN_NICK));
@@ -254,24 +259,24 @@ public class PropertiesDialog extends JDialog {
 
     private void saveValues() {
         props.setDefaultServer(connectPanel.getDefaultServer());
-		props.setServers(connectPanel.getServers());
-    	props.setUserID(connectPanel.getUserName());
-    	props.setUserNick(connectPanel.getNickName());
+        props.setServers(connectPanel.getServers());
+        props.setUserID(connectPanel.getUserName());
+        props.setUserNick(connectPanel.getNickName());
         props.setUserAlternativeNick(connectPanel.getAlternativeNickName());
-    	props.setUserGroup(connectPanel.getGroupName());
-    	props.setUserPassword(connectPanel.getPassword());
+        props.setUserGroup(connectPanel.getGroupName());
+        props.setUserPassword(connectPanel.getPassword());
 
-		props.setAutoConnect(connectOptionsPanel.isConnectOnStartupEnabled());
-		props.setKeepConnectionAliveEnabled(connectOptionsPanel.isKeepConnectionAliveEnabled());
-		props.setKeepConnectionAliveInterval(connectOptionsPanel.getKeepConnectionAliveInterval());
-		props.setEchoback(connectOptionsPanel.getEchoback());
+        props.setAutoConnect(connectOptionsPanel.isConnectOnStartupEnabled());
+        props.setKeepConnectionAliveEnabled(connectOptionsPanel.isKeepConnectionAliveEnabled());
+        props.setKeepConnectionAliveInterval(connectOptionsPanel.getKeepConnectionAliveInterval());
+        props.setEchoback(connectOptionsPanel.getEchoback());
 
-		props.setDisplaySizeLimited(displayPanel.isLimitDisplaySizeEnabled());
-		props.setDisplaySizeLimit(displayPanel.getSizeLimit());
-		props.setEmoticonsEnabled(displayPanel.areEmoticonsEnabled());
-		props.setAnimatedEmoticonsEnabled(displayPanel.areAnimatedEmoticonsEnabled());
-		props.setMessageTimestampsEnabled(displayPanel.areMessageTimestampsEnabled());
-		props.setMessageTimestampsFormat(displayPanel.getMessageTimestampsFormat());
+        props.setDisplaySizeLimited(displayPanel.isLimitDisplaySizeEnabled());
+        props.setDisplaySizeLimit(displayPanel.getSizeLimit());
+        props.setEmoticonsEnabled(displayPanel.areEmoticonsEnabled());
+        props.setAnimatedEmoticonsEnabled(displayPanel.areAnimatedEmoticonsEnabled());
+        props.setMessageTimestampsEnabled(displayPanel.areMessageTimestampsEnabled());
+        props.setMessageTimestampsFormat(displayPanel.getMessageTimestampsFormat());
 
         StyleContext styleContext = StyleContext.getDefaultStyleContext();
 
@@ -321,7 +326,7 @@ public class PropertiesDialog extends JDialog {
         props.setLogAppend(loggingPanel.isAppendToLogEnabled());
         props.setLogFileName(loggingPanel.getLogFileName());
 
-		props.setExecuteInitScriptEnabled(scriptingPanel.isExecuteInitScriptEnabled());
+        props.setExecuteInitScriptEnabled(scriptingPanel.isExecuteInitScriptEnabled());
         props.setInitScript(scriptingPanel.getInitScript());
 
         props.setPersonalWindowsEnabled(advancedPanel.arePersonalWindowsEnabled());

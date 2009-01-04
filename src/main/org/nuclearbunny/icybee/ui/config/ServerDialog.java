@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,9 @@
 package org.nuclearbunny.icybee.ui.config;
 
 import org.nuclearbunny.icybee.ui.UIMessages;
-import org.nuclearbunny.icybee.ui.util.*;
+import org.nuclearbunny.icybee.ui.util.ActionHelper;
+import org.nuclearbunny.icybee.ui.util.JSpinnerHelper;
+import org.nuclearbunny.icybee.ui.util.JTextFieldHelper;
 
 import javax.swing.*;
 import javax.swing.border.Border;

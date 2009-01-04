@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,14 @@
 
 package org.nuclearbunny.icybee;
 
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.util.*;
-import javax.swing.text.*;
+import static java.lang.Boolean.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ICBProperties extends Properties {
     private static final String fontFamilyName = ".font.family";
@@ -34,54 +39,54 @@ public class ICBProperties extends Properties {
     private static final String backgroundColorName = ".background.color";
     private static final String foregroundColorName = ".foreground.color";
 
-	private String lastReleaseUsed = "0.00";
+    private String lastReleaseUsed = "0.00";
     private int frameXPos = 0;
     private int frameYPos = 0;
     private int frameWidth = 640;
-    private int frameHeight= 480;
-    private Boolean toolbarVisible = Boolean.TRUE;
-    private Boolean statusbarVisible = Boolean.TRUE;
-    private Boolean urlGrabberVisible = Boolean.TRUE;
+    private int frameHeight = 480;
+    private Boolean toolbarVisible = TRUE;
+    private Boolean statusbarVisible = TRUE;
+    private Boolean urlGrabberVisible = TRUE;
     private String userNick = "nobody";
     private String userAlternativeNick = "somebody";
     private String userID = System.getProperty("user.name");
     private String userGroup = "1";
     private String userPassword = "";
-    private Boolean autoConnect = new Boolean(false);
+    private Boolean autoConnect = false;
     private String defaultServer = "default.icb.net:7326";
-    private String[] servers = { "default.icb.net:7326", "test.icb.net:7326" };
-    private Boolean keepConnectionAlive = Boolean.TRUE;
+    private String[] servers = {"default.icb.net:7326", "test.icb.net:7326"};
+    private Boolean keepConnectionAlive = TRUE;
     private int keepConnectionAliveInterval = 300;
-    private Boolean personalWindows = Boolean.TRUE;
-    private Boolean addIncomingToHistory = Boolean.TRUE;
-    private Boolean addOutgoingToHistory = Boolean.TRUE;
-    private Boolean ignoreServerEchoback = Boolean.TRUE;
+    private Boolean personalWindows = TRUE;
+    private Boolean addIncomingToHistory = TRUE;
+    private Boolean addOutgoingToHistory = TRUE;
+    private Boolean ignoreServerEchoback = TRUE;
     private int echoback = Echoback.ECHOBACK_VERBOSE_SERVER;
     private String logFileName = "icb.log";
-    private Boolean logAutomatically = Boolean.FALSE;
-    private Boolean logAppend = Boolean.TRUE;
-    private Map styleMap = new HashMap();
-    private Boolean executeInitScript = Boolean.FALSE;
+    private Boolean logAutomatically = FALSE;
+    private Boolean logAppend = TRUE;
+    private Map<String, Style> styleMap = new HashMap<String, Style>();
+    private Boolean executeInitScript = FALSE;
     private String initScript = ".icybee.rc";
     private String commandPrefix = "/";
-    private Boolean emoticonsEnabled = Boolean.TRUE;
-    private Boolean animatedEmoticonsEnabled = Boolean.TRUE;
+    private Boolean emoticonsEnabled = TRUE;
+    private Boolean animatedEmoticonsEnabled = TRUE;
     private String lookAndFeel = "";
-    private Boolean messageTimestampsEnabled = Boolean.FALSE;
+    private Boolean messageTimestampsEnabled = FALSE;
     private String messageTimestampsFormat = "HH:mm";
-    private Boolean displaySizeLimitEnabled = Boolean.FALSE;
+    private Boolean displaySizeLimitEnabled = FALSE;
     private int displaySizeLimit = 1000;
     private String textEncoding = "US-ASCII";
 
     private String defaultFontFamily = "Monospaced";
     private String defaultFontSize = "12";
-    private String defaultBold = Boolean.FALSE.toString();
-    private String defaultItalic = Boolean.FALSE.toString();
-    private String defaultUnderline = Boolean.FALSE.toString();
+    private String defaultBold = FALSE.toString();
+    private String defaultItalic = FALSE.toString();
+    private String defaultUnderline = FALSE.toString();
     private String defaultBackgroundColor = Integer.toString(SystemColor.window.getRGB());
     private String defaultForegroundColor = Integer.toString(SystemColor.windowText.getRGB());
 
-	private String lastReleaseUsedName = "last.release.used";
+    private String lastReleaseUsedName = "last.release.used";
     private String frameXPosName = "frame.xpos";
     private String frameYPosName = "frame.ypos";
     private String frameWidthName = "frame.width";
@@ -124,16 +129,18 @@ public class ICBProperties extends Properties {
         getParameters();
     }
 
-	public String getLastReleaseUsed() {
-		return lastReleaseUsed;
-	}
-	public void setLastReleaseUsed(String lastReleaseUsed) {
-		this.lastReleaseUsed = lastReleaseUsed;
-	}
+    public String getLastReleaseUsed() {
+        return lastReleaseUsed;
+    }
+
+    public void setLastReleaseUsed(String lastReleaseUsed) {
+        this.lastReleaseUsed = lastReleaseUsed;
+    }
 
     public void setFrameXPos(int frameXPos) {
         this.frameXPos = frameXPos;
     }
+
     public int getFrameXPos() {
         return frameXPos;
     }
@@ -141,6 +148,7 @@ public class ICBProperties extends Properties {
     public void setFrameYPos(int frameYPos) {
         this.frameYPos = frameYPos;
     }
+
     public int getFrameYPos() {
         return frameYPos;
     }
@@ -148,6 +156,7 @@ public class ICBProperties extends Properties {
     public void setFrameWidth(int frameWidth) {
         this.frameWidth = frameWidth;
     }
+
     public int getFrameWidth() {
         return frameWidth;
     }
@@ -155,35 +164,39 @@ public class ICBProperties extends Properties {
     public void setFrameHeight(int frameHeight) {
         this.frameHeight = frameHeight;
     }
+
     public int getFrameHeight() {
         return frameHeight;
     }
 
     public void setToolbarVisible(boolean visible) {
-        this.toolbarVisible = new Boolean(visible);
+        this.toolbarVisible = visible;
     }
+
     public boolean isToolbarVisible() {
-        return toolbarVisible.booleanValue();
+        return toolbarVisible;
     }
 
     public void setStatusbarVisible(boolean visible) {
-        this.statusbarVisible = new Boolean(visible);
-    }
-    public boolean isStatusbarVisible() {
-        return statusbarVisible.booleanValue();
+        this.statusbarVisible = visible;
     }
 
-	public boolean isURLGrabberVisible() {
-		return urlGrabberVisible.booleanValue();
-	}
-	
-	public void setURLGrabberVisible(boolean visible) {
-		this.urlGrabberVisible = new Boolean(visible);
-	}
-	
+    public boolean isStatusbarVisible() {
+        return statusbarVisible;
+    }
+
+    public boolean isURLGrabberVisible() {
+        return urlGrabberVisible;
+    }
+
+    public void setURLGrabberVisible(boolean visible) {
+        this.urlGrabberVisible = visible;
+    }
+
     public void setUserNick(String userNick) {
         this.userNick = userNick;
     }
+
     public String getUserNick() {
         return userNick;
     }
@@ -191,6 +204,7 @@ public class ICBProperties extends Properties {
     public void setUserAlternativeNick(String userAlternativeNick) {
         this.userAlternativeNick = userAlternativeNick;
     }
+
     public String getUserAlternativeNick() {
         return userAlternativeNick;
     }
@@ -198,6 +212,7 @@ public class ICBProperties extends Properties {
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
     public String getUserID() {
         return userID;
     }
@@ -219,16 +234,17 @@ public class ICBProperties extends Properties {
     }
 
     public void setAutoConnect(boolean autoConnect) {
-        this.autoConnect = new Boolean(autoConnect);
+        this.autoConnect = autoConnect;
     }
 
     public boolean getAutoConnect() {
-        return autoConnect.booleanValue();
+        return autoConnect;
     }
 
     public String getDefaultServer() {
         return defaultServer;
     }
+
     public void setDefaultServer(String defaultServer) {
         if (defaultServer == null) {
             defaultServer = "";
@@ -239,58 +255,66 @@ public class ICBProperties extends Properties {
     public String[] getServers() {
         return servers;
     }
+
     public void setServers(String[] servers) {
         this.servers = servers;
     }
 
-	public boolean isKeepConnectionAliveEnabled() {
-		return keepConnectionAlive.booleanValue();
-	}
-	public void setKeepConnectionAliveEnabled(boolean enabled) {
-		keepConnectionAlive = new Boolean(enabled);
-	}
-	
-	public int getKeepConnectionAliveInterval() {
-		return keepConnectionAliveInterval;
-	}
-	public void setKeepConnectionAliveInterval(int interval) {
-		keepConnectionAliveInterval = interval;
-	}
-	
-    public boolean arePersonalWindowsEnabled() {
-        return personalWindows.booleanValue();
+    public boolean isKeepConnectionAliveEnabled() {
+        return keepConnectionAlive;
     }
+
+    public void setKeepConnectionAliveEnabled(boolean enabled) {
+        keepConnectionAlive = enabled;
+    }
+
+    public int getKeepConnectionAliveInterval() {
+        return keepConnectionAliveInterval;
+    }
+
+    public void setKeepConnectionAliveInterval(int interval) {
+        keepConnectionAliveInterval = interval;
+    }
+
+    public boolean arePersonalWindowsEnabled() {
+        return personalWindows;
+    }
+
     public void setPersonalWindowsEnabled(boolean personalWindows) {
-        this.personalWindows = new Boolean(personalWindows);
+        this.personalWindows = personalWindows;
     }
 
     public boolean isAddIncomingToHistoryEnabled() {
-        return addIncomingToHistory.booleanValue();
+        return addIncomingToHistory;
     }
+
     public void setAddIncomingToHistoryEnabled(boolean addToHistory) {
-        this.addIncomingToHistory = new Boolean(addToHistory);
+        this.addIncomingToHistory = addToHistory;
     }
 
     public boolean isAddOutgoingToHistoryEnabled() {
-        return addOutgoingToHistory.booleanValue();
+        return addOutgoingToHistory;
     }
+
     public void setAddOutgoingToHistoryEnabled(boolean addToHistory) {
-        this.addOutgoingToHistory = new Boolean(addToHistory);
+        this.addOutgoingToHistory = addToHistory;
     }
 
     public boolean isIgnoreServerEchoback() {
-        return ignoreServerEchoback.booleanValue();
+        return ignoreServerEchoback;
     }
+
     public void setIgnoreServerEchoback(boolean ignoreServerEchoback) {
-        this.ignoreServerEchoback = new Boolean(ignoreServerEchoback);
+        this.ignoreServerEchoback = ignoreServerEchoback;
     }
 
     public int getEchoback() {
         return echoback;
     }
-    public void setEchoback(int echoback)  {
+
+    public void setEchoback(int echoback) {
         // special fix to reset invalid values of echoback from old client version
-        if (echoback >= Echoback.ECHOBACK_VERBOSE_SERVER)  {
+        if (echoback >= Echoback.ECHOBACK_VERBOSE_SERVER) {
             echoback = Echoback.ECHOBACK_VERBOSE_SERVER;
         }
         this.echoback = echoback;
@@ -299,26 +323,29 @@ public class ICBProperties extends Properties {
     public String getLogFileName() {
         return logFileName;
     }
+
     public void setLogFileName(String logFileName) {
         this.logFileName = logFileName;
     }
 
     public boolean getLogAutomatically() {
-        return logAutomatically.booleanValue();
+        return logAutomatically;
     }
+
     public void setLogAutomatically(boolean logAutomatically) {
-        this.logAutomatically = new Boolean(logAutomatically);
+        this.logAutomatically = logAutomatically;
     }
 
     public boolean getLogAppend() {
-        return logAppend.booleanValue();
+        return logAppend;
     }
+
     public void setLogAppend(boolean logAppend) {
-        this.logAppend = new Boolean(logAppend);
+        this.logAppend = logAppend;
     }
 
     public Style getTextStyle(String styleName) {
-        Style s = (Style) styleMap.get(styleName);
+        Style s = styleMap.get(styleName);
         if (s != null) {
             return s;
         }
@@ -333,13 +360,13 @@ public class ICBProperties extends Properties {
         int fontSize = Integer.parseInt(properties.getProperty(styleName + fontSizeName, defaultFontSize));
         StyleConstants.setFontSize(s, fontSize);
 
-        boolean bold = Boolean.valueOf(properties.getProperty(styleName + boldName, defaultBold)).booleanValue();
+        boolean bold = valueOf(properties.getProperty(styleName + boldName, defaultBold));
         StyleConstants.setBold(s, bold);
 
-        boolean italic = Boolean.valueOf(properties.getProperty(styleName + italicName, defaultItalic)).booleanValue();
+        boolean italic = valueOf(properties.getProperty(styleName + italicName, defaultItalic)).booleanValue();
         StyleConstants.setItalic(s, italic);
-        
-        boolean underline = Boolean.valueOf(properties.getProperty(styleName + underlineName, defaultUnderline)).booleanValue();
+
+        boolean underline = valueOf(properties.getProperty(styleName + underlineName, defaultUnderline)).booleanValue();
         StyleConstants.setUnderline(s, underline);
 
         Color background = new Color(Integer.parseInt(
@@ -353,89 +380,101 @@ public class ICBProperties extends Properties {
         styleMap.put(styleName, s);
         return s;
     }
+
     public void setTextStyle(Style style) {
         styleMap.put(style.getName(), style);
     }
 
-	public boolean isExecuteInitScriptEnabled() {
-		return executeInitScript.booleanValue();
-	}
-	public void setExecuteInitScriptEnabled(boolean enabled) {
-		executeInitScript = new Boolean(enabled);
-	}
-	
-    public String getInitScript()  {
+    public boolean isExecuteInitScriptEnabled() {
+        return executeInitScript;
+    }
+
+    public void setExecuteInitScriptEnabled(boolean enabled) {
+        executeInitScript = enabled;
+    }
+
+    public String getInitScript() {
         return initScript;
     }
-    public void setInitScript(String initScript)  {
+
+    public void setInitScript(String initScript) {
         this.initScript = initScript;
     }
-    
+
     public String getCommandPrefix() {
-    	return commandPrefix;
+        return commandPrefix;
     }
+
     public void setCommandPrefix(String commandPrefix) {
-    	this.commandPrefix = commandPrefix;
+        this.commandPrefix = commandPrefix;
     }
 
     public boolean areEmoticonsEnabled() {
-        return emoticonsEnabled.booleanValue();
+        return emoticonsEnabled;
     }
-    public void setEmoticonsEnabled(boolean emoticonsEnabled) {
-    	this.emoticonsEnabled = new Boolean(emoticonsEnabled);
-    }
-    
-    public boolean areAnimatedEmoticonsEnabled() {
-    	return animatedEmoticonsEnabled.booleanValue();
-    }
-    public void setAnimatedEmoticonsEnabled(boolean animatedEmoticonsEnabled) {
-    	this.animatedEmoticonsEnabled = new Boolean(animatedEmoticonsEnabled);
-    }
-    
-    public String getLookAndFeel() {
-    	return lookAndFeel;
-    }
-   	public void setLookAndFeel(String lookAndFeelClassName) {
-   		this.lookAndFeel = lookAndFeelClassName;
-   	}
-   	
-   	public boolean areMessageTimestampsEnabled() {
-   		return messageTimestampsEnabled.booleanValue();
-   	}
-   	public void setMessageTimestampsEnabled(boolean messageTimestampsEnabled) {
-   		this.messageTimestampsEnabled = new Boolean(messageTimestampsEnabled);
-   	}
-   	
-   	public String getMessageTimestampsFormat() {
-   		return messageTimestampsFormat;
-   	}
-   	public void setMessageTimestampsFormat(String messageTimestampsFormat) {
-   		this.messageTimestampsFormat = messageTimestampsFormat;
-   	}
 
-	public boolean isDisplaySizeLimited() {
-		return displaySizeLimitEnabled.booleanValue();
-	}
-	public void setDisplaySizeLimited(boolean enabled) {
-		this.displaySizeLimitEnabled = new Boolean(enabled);
-	}
-	
-	public int getDisplaySizeLimit() {
-		return displaySizeLimit;
-	}
-	public void setDisplaySizeLimit(int displaySizeLimit) {
-		this.displaySizeLimit = displaySizeLimit;
-	}
-	
-	public String getTextEncoding() {
-		return textEncoding;
-	}
-	public void setTextEncoding(String encoding) {
-		this.textEncoding = encoding;
-	}
-	
+    public void setEmoticonsEnabled(boolean emoticonsEnabled) {
+        this.emoticonsEnabled = emoticonsEnabled;
+    }
+
+    public boolean areAnimatedEmoticonsEnabled() {
+        return animatedEmoticonsEnabled;
+    }
+
+    public void setAnimatedEmoticonsEnabled(boolean animatedEmoticonsEnabled) {
+        this.animatedEmoticonsEnabled = animatedEmoticonsEnabled;
+    }
+
+    public String getLookAndFeel() {
+        return lookAndFeel;
+    }
+
+    public void setLookAndFeel(String lookAndFeelClassName) {
+        this.lookAndFeel = lookAndFeelClassName;
+    }
+
+    public boolean areMessageTimestampsEnabled() {
+        return messageTimestampsEnabled;
+    }
+
+    public void setMessageTimestampsEnabled(boolean messageTimestampsEnabled) {
+        this.messageTimestampsEnabled = messageTimestampsEnabled;
+    }
+
+    public String getMessageTimestampsFormat() {
+        return messageTimestampsFormat;
+    }
+
+    public void setMessageTimestampsFormat(String messageTimestampsFormat) {
+        this.messageTimestampsFormat = messageTimestampsFormat;
+    }
+
+    public boolean isDisplaySizeLimited() {
+        return displaySizeLimitEnabled;
+    }
+
+    public void setDisplaySizeLimited(boolean enabled) {
+        this.displaySizeLimitEnabled = enabled;
+    }
+
+    public int getDisplaySizeLimit() {
+        return displaySizeLimit;
+    }
+
+    public void setDisplaySizeLimit(int displaySizeLimit) {
+        this.displaySizeLimit = displaySizeLimit;
+    }
+
+    public String getTextEncoding() {
+        return textEncoding;
+    }
+
+    public void setTextEncoding(String encoding) {
+        this.textEncoding = encoding;
+    }
+
     protected void setDefaults(java.util.Properties defaults) {
-    	defaults.put(lastReleaseUsedName, lastReleaseUsed);
+        defaults.put(lastReleaseUsedName, lastReleaseUsed);
         defaults.put(frameXPosName, Integer.toString(frameXPos));
         defaults.put(frameYPosName, Integer.toString(frameYPos));
         defaults.put(frameWidthName, Integer.toString(frameWidth));
@@ -453,9 +492,9 @@ public class ICBProperties extends Properties {
 
         defaults.put(serversName, collapseArray(servers));
 
-		defaults.put(keepConnectionAliveName, keepConnectionAlive.toString());
-		defaults.put(keepConnectionAliveIntervalName, Integer.toString(keepConnectionAliveInterval));
-		
+        defaults.put(keepConnectionAliveName, keepConnectionAlive.toString());
+        defaults.put(keepConnectionAliveIntervalName, Integer.toString(keepConnectionAliveInterval));
+
         defaults.put(personalWindowsName, personalWindows.toString());
         defaults.put(addIncomingToHistoryName, addIncomingToHistory.toString());
         defaults.put(addOutgoingToHistoryName, addOutgoingToHistory.toString());
@@ -475,7 +514,7 @@ public class ICBProperties extends Properties {
         defaults.put(lookAndFeelName, lookAndFeel);
         defaults.put(messageTimestampsEnabledName, messageTimestampsEnabled.toString());
         defaults.put(messageTimestampsFormatName, messageTimestampsFormat);
-        
+
         defaults.put(displaySizeLimitEnabledName, displaySizeLimitEnabled.toString());
         defaults.put(displaySizeLimitName, Integer.toString(displaySizeLimit));
         defaults.put(textEncodingName, textEncoding);
@@ -501,59 +540,59 @@ public class ICBProperties extends Properties {
         defaults.put(org.nuclearbunny.icybee.ui.ClientPanel.TEXT_STATUS_HEADER + ".foreground.color",
                 Integer.toString(Color.black.getRGB()));
         defaults.put(org.nuclearbunny.icybee.ui.ClientPanel.TEXT_TIMESTAMP + ".foreground.color",
-        		Integer.toString(Color.blue.getRGB()));
+                Integer.toString(Color.blue.getRGB()));
     }
 
     protected void updateSettingsFromProperties() {
-    	lastReleaseUsed = properties.getProperty(lastReleaseUsedName);
+        lastReleaseUsed = properties.getProperty(lastReleaseUsedName);
         frameXPos = Integer.parseInt(properties.getProperty(frameXPosName));
         frameYPos = Integer.parseInt(properties.getProperty(frameYPosName));
         frameWidth = Integer.parseInt(properties.getProperty(frameWidthName));
         frameHeight = Integer.parseInt(properties.getProperty(frameHeightName));
-        toolbarVisible = Boolean.valueOf(properties.getProperty(toolbarVisibleName));
-        statusbarVisible = Boolean.valueOf(properties.getProperty(statusbarVisibleName));
-        urlGrabberVisible = Boolean.valueOf(properties.getProperty(urlGrabberVisibleName));
+        toolbarVisible = valueOf(properties.getProperty(toolbarVisibleName));
+        statusbarVisible = valueOf(properties.getProperty(statusbarVisibleName));
+        urlGrabberVisible = valueOf(properties.getProperty(urlGrabberVisibleName));
         userNick = properties.getProperty(userNickName);
         userAlternativeNick = properties.getProperty(userAlternativeNickName);
         userID = properties.getProperty(userIDName);
         userGroup = properties.getProperty(userGroupName);
         userPassword = properties.getProperty(userPasswordName);
-        autoConnect = Boolean.valueOf(properties.getProperty(autoConnectName));
+        autoConnect = valueOf(properties.getProperty(autoConnectName));
         defaultServer = properties.getProperty(defaultServerName);
 
         servers = expandArray(properties.getProperty(serversName));
 
-		keepConnectionAlive = Boolean.valueOf(properties.getProperty(keepConnectionAliveName));
-		keepConnectionAliveInterval = Integer.parseInt(properties.getProperty(keepConnectionAliveIntervalName));
+        keepConnectionAlive = valueOf(properties.getProperty(keepConnectionAliveName));
+        keepConnectionAliveInterval = Integer.parseInt(properties.getProperty(keepConnectionAliveIntervalName));
 
-        personalWindows = Boolean.valueOf(properties.getProperty(personalWindowsName));
-        addIncomingToHistory = Boolean.valueOf(properties.getProperty(addIncomingToHistoryName));
-        addOutgoingToHistory = Boolean.valueOf(properties.getProperty(addOutgoingToHistoryName));
-        ignoreServerEchoback = Boolean.valueOf(properties.getProperty(ignoreServerEchobackName));
+        personalWindows = valueOf(properties.getProperty(personalWindowsName));
+        addIncomingToHistory = valueOf(properties.getProperty(addIncomingToHistoryName));
+        addOutgoingToHistory = valueOf(properties.getProperty(addOutgoingToHistoryName));
+        ignoreServerEchoback = valueOf(properties.getProperty(ignoreServerEchobackName));
 
         echoback = Integer.parseInt(properties.getProperty(echobackName));
 
         logFileName = properties.getProperty(logFileNameName);
-        logAutomatically = Boolean.valueOf(properties.getProperty(logAutomaticallyName));
-        logAppend = Boolean.valueOf(properties.getProperty(logAppendName));
+        logAutomatically = valueOf(properties.getProperty(logAutomaticallyName));
+        logAppend = valueOf(properties.getProperty(logAppendName));
 
-		executeInitScript = Boolean.valueOf(properties.getProperty(executeInitScriptName));
+        executeInitScript = valueOf(properties.getProperty(executeInitScriptName));
         initScript = properties.getProperty(initScriptName);
         commandPrefix = properties.getProperty(commandPrefixName);
-        emoticonsEnabled = Boolean.valueOf(properties.getProperty(emoticonsEnabledName));
-        animatedEmoticonsEnabled = Boolean.valueOf(properties.getProperty(animatedEmoticonsEnabledName));
+        emoticonsEnabled = valueOf(properties.getProperty(emoticonsEnabledName));
+        animatedEmoticonsEnabled = valueOf(properties.getProperty(animatedEmoticonsEnabledName));
         lookAndFeel = properties.getProperty(lookAndFeelName);
-        messageTimestampsEnabled = Boolean.valueOf(properties.getProperty(messageTimestampsEnabledName));
+        messageTimestampsEnabled = valueOf(properties.getProperty(messageTimestampsEnabledName));
         messageTimestampsFormat = properties.getProperty(messageTimestampsFormatName);
-        
-        displaySizeLimitEnabled = Boolean.valueOf(properties.getProperty(displaySizeLimitEnabledName));
+
+        displaySizeLimitEnabled = valueOf(properties.getProperty(displaySizeLimitEnabledName));
         displaySizeLimit = Integer.parseInt(properties.getProperty(displaySizeLimitName));
-        
+
         textEncoding = properties.getProperty(textEncodingName);
     }
 
     protected void updatePropertiesFromSettings() {
-    	properties.put(lastReleaseUsedName, lastReleaseUsed);
+        properties.put(lastReleaseUsedName, lastReleaseUsed);
         properties.put(frameXPosName, Integer.toString(frameXPos));
         properties.put(frameYPosName, Integer.toString(frameYPos));
         properties.put(frameWidthName, Integer.toString(frameWidth));
@@ -571,8 +610,8 @@ public class ICBProperties extends Properties {
 
         properties.put(serversName, collapseArray(servers));
 
-		properties.put(keepConnectionAliveName, keepConnectionAlive.toString());
-		properties.put(keepConnectionAliveIntervalName, Integer.toString(keepConnectionAliveInterval));
+        properties.put(keepConnectionAliveName, keepConnectionAlive.toString());
+        properties.put(keepConnectionAliveIntervalName, Integer.toString(keepConnectionAliveInterval));
 
         properties.put(personalWindowsName, personalWindows.toString());
         properties.put(addIncomingToHistoryName, addIncomingToHistory.toString());
@@ -585,7 +624,7 @@ public class ICBProperties extends Properties {
         properties.put(logAutomaticallyName, logAutomatically.toString());
         properties.put(logAppendName, logAppend.toString());
 
-		properties.put(executeInitScriptName, executeInitScript.toString());
+        properties.put(executeInitScriptName, executeInitScript.toString());
         properties.put(initScriptName, initScript);
         properties.put(commandPrefixName, commandPrefix);
         properties.put(emoticonsEnabledName, emoticonsEnabled.toString());
@@ -593,22 +632,20 @@ public class ICBProperties extends Properties {
         properties.put(lookAndFeelName, lookAndFeel);
         properties.put(messageTimestampsEnabledName, messageTimestampsEnabled.toString());
         properties.put(messageTimestampsFormatName, messageTimestampsFormat);
-        
+
         properties.put(displaySizeLimitEnabledName, displaySizeLimitEnabled.toString());
         properties.put(displaySizeLimitName, Integer.toString(displaySizeLimit));
-        
+
         properties.put(textEncodingName, textEncoding);
 
         /* iterate over the styleMap and store all styles */
-        Iterator keys = styleMap.keySet().iterator();
-        while (keys.hasNext()) {
-            Style s = (Style) styleMap.get(keys.next());
-            String styleName = s.getName();
+        for (final Style s : styleMap.values()) {
+            final String styleName = s.getName();
             properties.put(styleName + fontFamilyName, StyleConstants.getFontFamily(s));
             properties.put(styleName + fontSizeName, Integer.toString(StyleConstants.getFontSize(s)));
-            properties.put(styleName + boldName, new Boolean(StyleConstants.isBold(s)).toString());
-            properties.put(styleName + italicName, new Boolean(StyleConstants.isItalic(s)).toString());
-            properties.put(styleName + underlineName, new Boolean(StyleConstants.isUnderline(s)).toString());
+            properties.put(styleName + boldName, Boolean.toString(StyleConstants.isBold(s)));
+            properties.put(styleName + italicName, Boolean.toString(StyleConstants.isItalic(s)));
+            properties.put(styleName + underlineName, Boolean.toString(StyleConstants.isUnderline(s)));
             properties.put(styleName + backgroundColorName, Integer.toString(StyleConstants.getBackground(s).getRGB()));
             properties.put(styleName + foregroundColorName, Integer.toString(StyleConstants.getForeground(s).getRGB()));
         }
@@ -627,16 +664,16 @@ public class ICBProperties extends Properties {
     }
 
     protected String[] expandArray(String s) {
-        ArrayList a = new ArrayList();
+        ArrayList<String> a = new ArrayList<String>();
         int n;
         while ((n = s.indexOf(',')) != -1) {
             String e = s.substring(0, n);
             a.add(e);
-            s = s.substring(n+1);
+            s = s.substring(n + 1);
         }
         a.add(s);
 
         String[] sa = new String[a.size()];
-        return (String[]) a.toArray(sa);
+        return a.toArray(sa);
     }
 }

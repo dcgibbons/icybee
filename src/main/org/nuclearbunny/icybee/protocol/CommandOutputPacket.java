@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,29 +21,22 @@
 
 package org.nuclearbunny.icybee.protocol;
 
-import org.nuclearbunny.util.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
+import java.net.ProtocolException;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class CommandOutputPacket extends Packet {
-	public static final String WHO_GROUP_HEADER = "gh";
-	public static final String WHO_GROUP_INFO = "wg";
-	public static final String WHO_HEADER = "wh";
-	public static final String WHO_LISTING = "wl";
-	public static final String COMMAND_OUTPUT = "co";
+    public static final String WHO_GROUP_HEADER = "gh";
+    public static final String WHO_GROUP_INFO = "wg";
+    public static final String WHO_HEADER = "wh";
+    public static final String WHO_LISTING = "wl";
+    public static final String COMMAND_OUTPUT = "co";
 
-    public CommandOutputPacket(String rawPacket) throws ProtocolException {
-        init(Packet.SERVER, rawPacket);
-    }
-
-    public String getCommandOutput() {
-        return cmdOutput;
-    }
-
-    protected void init(int from, String rawPacket) throws ProtocolException {
-        super.init(from, rawPacket);
+    public CommandOutputPacket(final String rawPacket) throws ProtocolException {
+        super(rawPacket);
 
         String cmd = rawPacket.substring(1, 3);
 
@@ -65,7 +58,7 @@ public class CommandOutputPacket extends Packet {
             cmdOutput = "   Nickname      Idle      Sign-on  Account";
 
         } else if (cmd.compareTo("wl") == 0) {
-            parseWhoListing(rawPacket);
+            parseWhoListing();
 
         } else if (cmd.compareTo("ch") == 0) {
             //System.err.println("unsupported 'ch' command output received");
@@ -74,16 +67,20 @@ public class CommandOutputPacket extends Packet {
             cmdOutput = "/" + getField(1);
 
         } else if (cmd.compareTo("co") == 0) {
-            cmdOutput = rawPacket.substring(4, rawPacket.length()-1); // XXX this is broken
+            cmdOutput = rawPacket.substring(4, rawPacket.length() - 1); // XXX this is broken
 
         } else {
-            cmdOutput = rawPacket.substring(1, rawPacket.length()-1);
+            cmdOutput = rawPacket.substring(1, rawPacket.length() - 1);
         }
+    }
+
+    public String getCommandOutput() {
+        return cmdOutput;
     }
 
     private String cmdOutput;
 
-    private void parseWhoListing(String rawPacket) {
+    private void parseWhoListing() {
         StringBuffer buffer = new StringBuffer(80);
 
         /* indicate group moderator */
@@ -97,7 +94,7 @@ public class CommandOutputPacket extends Packet {
             buffer.append(nick.substring(1, fieldWidth));
         } else {
             buffer.append(nick);
-            buffer.append(getSpaces(fieldWidth-nickLen));
+            buffer.append(getSpaces(fieldWidth - nickLen));
         }
         buffer.append(" ");
 
@@ -106,20 +103,20 @@ public class CommandOutputPacket extends Packet {
         if (idle < 60) {
             buffer.append("       - ");
         } else {
-            long hours = idle/3600;
+            long hours = idle / 3600;
             if (hours > 0) {
                 NumberFormat nf = NumberFormat.getNumberInstance();
                 FieldPosition fp = new FieldPosition(NumberFormat.INTEGER_FIELD);
                 nf.setMaximumIntegerDigits(3);
                 String h = nf.format(hours, new StringBuffer(), fp).toString();
-                buffer.append(getSpaces(3-fp.getEndIndex())).append(h)
-                      .append("h ");
-                idle -= 3600*hours;
+                buffer.append(getSpaces(3 - fp.getEndIndex())).append(h)
+                        .append("h ");
+                idle -= 3600 * hours;
             } else {
                 buffer.append("     ");
             }
 
-            long minutes = idle/60;
+            long minutes = idle / 60;
             if (minutes < 10) {
                 buffer.append(' ');
             }
@@ -128,14 +125,14 @@ public class CommandOutputPacket extends Packet {
 
         /* append sign-on time */
         long now = System.currentTimeMillis();
-        Date d = new Date(Long.parseLong(getField(5))*1000L);
-        long days = (now-d.getTime())/86400000L; // milliseconds in a day
+        Date d = new Date(Long.parseLong(getField(5)) * 1000L);
+        long days = (now - d.getTime()) / 86400000L; // milliseconds in a day
         if (days > 0) {
             NumberFormat nf = NumberFormat.getNumberInstance();
             FieldPosition fp = new FieldPosition(NumberFormat.INTEGER_FIELD);
             nf.setMaximumIntegerDigits(3);
             String ds = nf.format(days, new StringBuffer(), fp).toString();
-            buffer.append(getSpaces(3-fp.getEndIndex())).append(ds).append('+');
+            buffer.append(getSpaces(3 - fp.getEndIndex())).append(ds).append('+');
         } else {
             buffer.append("    ");
         }

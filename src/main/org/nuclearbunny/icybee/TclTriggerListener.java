@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,17 +22,17 @@
 package org.nuclearbunny.icybee;
 
 import org.nuclearbunny.icybee.protocol.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
 import tcl.lang.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TclTriggerListener implements MessageListener {
     private ICBClient theClient;
     private Interp interp;
 
     private static final Pattern rsvpPattern = Pattern.compile("You are invited to group (\\w*) by (\\w*)",
-                                                               Pattern.CASE_INSENSITIVE);
+            Pattern.CASE_INSENSITIVE);
     private static final Pattern arrivePattern = Pattern.compile("(\\w*) .*");
     private static final Pattern bootPattern = Pattern.compile("(\\w*) booted you\\.");
 
@@ -50,15 +50,15 @@ public class TclTriggerListener implements MessageListener {
             interp.setVar("theMessage", theMessage, TCL.GLOBAL_ONLY);
 
             if (p instanceof OpenPacket) {
-                processOpenPacket((OpenPacket)p);
+                processOpenPacket((OpenPacket) p);
             } else if (p instanceof PersonalPacket) {
-                processPersonalPacket((PersonalPacket)p);
+                processPersonalPacket((PersonalPacket) p);
             } else if (p instanceof BeepPacket) {
-                processBeepPacket((BeepPacket)p);
+                processBeepPacket((BeepPacket) p);
             } else if (p instanceof ErrorPacket) {
-                processErrorPacket((ErrorPacket)p);
+                processErrorPacket((ErrorPacket) p);
             } else if (p instanceof StatusPacket) {
-                processStatusPacket((StatusPacket)p);
+                processStatusPacket((StatusPacket) p);
             }
         } catch (TclException ex) {
             // TODO System.err.println("Uncaught TCL exception, " + ex);

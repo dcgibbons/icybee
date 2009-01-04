@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.nuclearbunny.util;
 
-import java.io.*;
+import java.io.PrintStream;
 
 /**
  * HexDump provides a dump method thyat displays a byte array
@@ -41,11 +41,11 @@ public class HexDump {
         StringBuffer outbuf;
         String ofs;
 
-        for (n = 0; n < buf.length; n+= HexDump.BYTE_COUNT) {
+        for (n = 0; n < buf.length; n += HexDump.BYTE_COUNT) {
             outbuf = new StringBuffer();
 
             ofs = Integer.toHexString(n).toUpperCase();
-            for (int j = 0, k = 4-ofs.length(); j < k; j++) {
+            for (int j = 0, k = 4 - ofs.length(); j < k; j++) {
                 outbuf.append("0");
             }
             outbuf.append(ofs).append(" ");
@@ -82,7 +82,7 @@ public class HexDump {
                 i++;
             }
 
-           out.println(outbuf.toString());
+            out.println(outbuf.toString());
         }
     }
 

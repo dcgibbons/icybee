@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,17 +25,18 @@ import java.net.URL;
 import java.util.EventObject;
 
 public class URLEvent extends EventObject {
-	private URL url;
-	
+    private URL url;
+
     public URLEvent(Object src, URL url) {
         super(src);
         this.url = url;
     }
 
-	public URL getURL() {
-		return url;
-	}
-	public void setURL(URL url) {
-		this.url = url;
-	}
+    public URL getURL() {
+        return url;
+    }
+
+    public void setURL(URL url) {
+        this.url = url;
+    }
 }

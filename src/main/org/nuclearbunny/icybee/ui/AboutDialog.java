@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@
 package org.nuclearbunny.icybee.ui;
 
 import java.awt.*;
-import java.text.*;
-import java.util.*;
+import java.text.NumberFormat;
+import java.util.ResourceBundle;
 
 public class AboutDialog extends HtmlDialog {
     private static final ResourceBundle verInfo = ResourceBundle.getBundle("version");
@@ -53,60 +53,60 @@ public class AboutDialog extends HtmlDialog {
 
         aboutText.append("<center>");
         aboutText.append("<font size=+2>")
-                 .append(UIMessages.messages.getString("about.dialog.app.name"))
-                 .append("</font>");
+                .append(UIMessages.messages.getString("about.dialog.app.name"))
+                .append("</font>");
         aboutText.append("<br>").append(UIMessages.messages.getString("about.dialog.version"))
-                 .append(" ").append(nf.format(release)).append(" ").append(releaseType);
+                .append(" ").append(nf.format(release)).append(" ").append(releaseType);
         aboutText.append("<br>").append(UIMessages.messages.getString("about.dialog.copyright.prefix"))
-                 .append(" ").append(verInfo.getString("ReleaseCopyrightYear"))
-                 .append(" ").append(UIMessages.messages.getString("about.dialog.copyright.postfix"));
+                .append(" ").append(verInfo.getString("ReleaseCopyrightYear"))
+                .append(" ").append(UIMessages.messages.getString("about.dialog.copyright.postfix"));
         aboutText.append("<br>");
         aboutText.append("<a href=\"").append(UIMessages.messages.getString("about.dialog.icybee.url")).append("\">")
-                 .append(UIMessages.messages.getString("about.dialog.icybee.url")).append("</a>");
+                .append(UIMessages.messages.getString("about.dialog.icybee.url")).append("</a>");
 
         aboutText.append("<br><table border=0 cellspacing=0 cellpadding=1>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.java.version")).append("</td>")
-                 .append("<td>").append(System.getProperty("java.version")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.java.version")).append("</td>")
+                .append("<td>").append(System.getProperty("java.version")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vendor")).append("</td>")
-                 .append("<td>").append(System.getProperty("java.vendor")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vendor")).append("</td>")
+                .append("<td>").append(System.getProperty("java.vendor")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vendor.url")).append("</td>")
-                 .append("<td><a href=\"").append(System.getProperty("java.vendor.url")).append("\">")
-                 .append(System.getProperty("java.vendor.url")).append("</a").append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vendor.url")).append("</td>")
+                .append("<td><a href=\"").append(System.getProperty("java.vendor.url")).append("\">")
+                .append(System.getProperty("java.vendor.url")).append("</a").append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vm.spec.version"))
-                 .append("</td>")
-                 .append("<td>").append(System.getProperty("java.vm.specification.version")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vm.spec.version"))
+                .append("</td>")
+                .append("<td>").append(System.getProperty("java.vm.specification.version")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vm.version")).append("</td>")
-                 .append("<td>").append(System.getProperty("java.vm.version")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vm.version")).append("</td>")
+                .append("<td>").append(System.getProperty("java.vm.version")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vm.vendor")).append("</td>")
-                 .append("<td>").append(System.getProperty("java.vm.vendor")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.java.vm.vendor")).append("</td>")
+                .append("<td>").append(System.getProperty("java.vm.vendor")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.java.home")).append("</td>")
-                 .append("<td>").append(System.getProperty("java.home")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.java.home")).append("</td>")
+                .append("<td>").append(System.getProperty("java.home")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.os.name")).append("</td>")
-                 .append("<td>").append(System.getProperty("os.name")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.os.name")).append("</td>")
+                .append("<td>").append(System.getProperty("os.name")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.os.arch")).append("</td>")
-                 .append("<td>").append(System.getProperty("os.arch")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.os.arch")).append("</td>")
+                .append("<td>").append(System.getProperty("os.arch")).append("</td>")
+                .append("</tr>");
         aboutText.append("<tr>")
-                 .append("<td>").append(UIMessages.messages.getString("about.dialog.os.version")).append("</td>")
-                 .append("<td>").append(System.getProperty("os.version")).append("</td>")
-                 .append("</tr>");
+                .append("<td>").append(UIMessages.messages.getString("about.dialog.os.version")).append("</td>")
+                .append("<td>").append(System.getProperty("os.version")).append("</td>")
+                .append("</tr>");
         aboutText.append("</table>");
         aboutText.append("</center>");
         aboutText.append("</body></html>");

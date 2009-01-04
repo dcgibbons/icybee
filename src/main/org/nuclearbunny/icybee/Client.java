@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,12 +26,17 @@ import java.io.IOException;
 // TODO: document the interface
 public interface Client {
     boolean isConnected();
+
     void connect(String server) throws IllegalStateException, IOException;
+
     void disconnect() throws IllegalStateException;
 
     boolean isLoggingEnabled();
+
     void startLogging() throws IllegalStateException, IOException;
+
     void startLogging(String logFileName) throws IllegalStateException, IOException;
+
     void stopLogging() throws IllegalStateException;
 
     void printMessage(int msgType, String msg);
@@ -39,12 +44,24 @@ public interface Client {
     void sendCommand(String cmd);
 
     void sendOpenMessage(String msg);
+
     void sendPersonalMessage(String nick, String origMsg);
+
     void sendWriteMessage(String nick, String origMsg);
+
     void sendCommandMessage(String command, String msg);
 
     void addUserHistory(String nick);
+
     String getNextUserFromHistory(boolean getLastUsed);
+
     void removeUserFromHistory(String nick);
+
     void clearHistory();
+
+    void listUsage(String name);
+
+    void addUsage(String name, String type, String args, String usage);
+
+    void removeUsage(String name);
 }

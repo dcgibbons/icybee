@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,16 @@
 
 package org.nuclearbunny.icybee.ui;
 
-import org.nuclearbunny.icybee.*;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.text.MessageFormat;
+import org.nuclearbunny.icybee.ICBClient;
+import org.nuclearbunny.icybee.StatusListener;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.MessageFormat;
+import java.util.EventObject;
 
 public class StatusBar extends JPanel implements StatusListener {
     private static final int TIMER_INTERVAL = 1000;

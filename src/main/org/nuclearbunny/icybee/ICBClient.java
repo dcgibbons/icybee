@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,21 +23,22 @@ package org.nuclearbunny.icybee;
 
 import org.nuclearbunny.icybee.protocol.*;
 import org.nuclearbunny.icybee.ui.OutputLogger;
-import org.nuclearbunny.util.*;
-import org.thereeds.utf7.*;
-import tcl.lang.*;
+import org.nuclearbunny.util.HexDump;
+import org.thereeds.utf7.Utf7Converter;
+import tcl.lang.TclException;
 
 import java.io.*;
-import java.net.*;
+import java.net.ProtocolException;
+import java.net.Socket;
 import java.util.*;
 
 public class ICBClient implements Client {
     private static final int READ_BUFFER_SIZE = 10240;
 
-    private List usageList = new LinkedList();
+    private List<Usage> usageList = new LinkedList<Usage>();
     private ICBProperties clientProperties = new ICBProperties();
     private TclUtil tclManager = new TclUtil(this);
-    private LinkedList userHistory = new LinkedList();
+    private LinkedList<String> userHistory = new LinkedList<String>();
     private int currentHistory = 0;
 
     private OutputLogger logger = null;
@@ -48,8 +49,8 @@ public class ICBClient implements Client {
     private int reconnectNeeded = 0;
 
     private ConnectionState state = ConnectionState.DISCONNECTED;
-    private List statusListeners = new LinkedList();
-    private List messageListeners = new LinkedList();
+    private List<StatusListener> statusListeners = new LinkedList<StatusListener>();
+    private List<MessageListener> messageListeners = new LinkedList<MessageListener>();
     private Socket socket = null;
     private BufferedOutputStream out = null;
     private Thread readerThread = null;
@@ -202,43 +203,35 @@ public class ICBClient implements Client {
      * user's current group.
      */
     public void sendOpenMessage(String msg) {
-        try {
-            msg = removeControlCharacters(msg);
+        msg = removeControlCharacters(msg);
 
-            if (IcyBee.isDebugEnabled()) {
-                System.out.println("Sending Open Message: ");
-                HexDump.dump(System.out, msg.toString().getBytes());
+        if (IcyBee.isDebugEnabled()) {
+            System.out.println("Sending Open Message: ");
+            HexDump.dump(System.out, msg.getBytes());
+        }
+
+        /* send the message in maximum sized chunks */
+        String currentMsg;
+        String remaining = msg;
+        int n;
+        do {
+            if (remaining.length() > ICBProtocol.MAX_OPEN_MESSAGE_SIZE) {
+                currentMsg = remaining.substring(0, ICBProtocol.MAX_OPEN_MESSAGE_SIZE);
+                n = currentMsg.lastIndexOf(' ');
+                if (n > 0) {
+                    currentMsg = currentMsg.substring(0, n + 1);
+                }
+                remaining = remaining.substring(currentMsg.length());
+            } else {
+                currentMsg = remaining;
+                remaining = "";
             }
 
-            /* send the message in maximum sized chunks */
-            String currentMsg;
-            String remaining = msg;
-            int n;
-            String pkt;
-            do {
-                if (remaining.length() > ICBProtocol.MAX_OPEN_MESSAGE_SIZE) {
-                    currentMsg = remaining.substring(0, ICBProtocol.MAX_OPEN_MESSAGE_SIZE);
-                    n = currentMsg.lastIndexOf(' ');
-                    if (n > 0) {
-                        currentMsg = currentMsg.substring(0, n + 1);
-                    }
-                    remaining = remaining.substring(currentMsg.length());
-                } else {
-                    currentMsg = remaining;
-                    remaining = "";
-                }
+            OpenPacket p = new OpenPacket();
+            p.setText(currentMsg);
+            sendPacket(p.toString());
 
-                pkt = new OpenPacket(Packet.CLIENT, currentMsg).toString();
-                sendPacket(pkt);
-
-            } while (remaining.length() > 0);
-
-        } catch (ProtocolException ex) {
-            // XXX fix more appropriately
-            System.err.println("Exception sending open message, " + ex);
-            ex.printStackTrace(System.err);
-            System.err.println("Attempting to continue...");
-        }
+        } while (remaining.length() > 0);
     }
 
     /**
@@ -304,18 +297,9 @@ public class ICBClient implements Client {
     /**
      * Sends the specified command and argument text to the server.
      */
-    public void sendCommandMessage(String command, String msg) {
-        try {
-            // XXX validate packet length from user
-            String pkt = new CommandPacket(command, msg).toString();
-            sendPacket(pkt);
-
-        } catch (ProtocolException ex) {
-            System.err.println("Exception sending command message, " + ex);
-            ex.printStackTrace(System.err);
-            System.err.println("Attempting to continue...");
-            // XXX fix more appropriately
-        }
+    public void sendCommandMessage(final String command, final String msg) {
+        // XXX validate packet length from user
+        sendPacket(new CommandPacket(command, msg).toString());
     }
 
     public void clearHistory() {
@@ -355,7 +339,7 @@ public class ICBClient implements Client {
     public String getNextUserFromHistory(boolean getLastUsed) {
         String nick = null;
         try {
-            nick = userHistory.get(currentHistory).toString();
+            nick = userHistory.get(currentHistory);
             currentHistory++;
             if (currentHistory == userHistory.size()) {
                 currentHistory = 0;
@@ -365,6 +349,187 @@ public class ICBClient implements Client {
         }
         return nick;
     }
+
+    static class Usage {
+        String name;
+        String type;
+        String args;
+        String usage;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addUsage(String name, String type, String args, String usage) {
+        Usage u = new Usage();
+        u.name = name;
+        u.type = type;
+        u.args = args;
+        u.usage = usage;
+        usageList.add(u);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeUsage(String name) {
+        ListIterator<Usage> i = usageList.listIterator();
+        while (i.hasNext()) {
+            Usage u = i.next();
+            if (u.name.compareTo(name) == 0) {
+                i.remove();
+                break;
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unusedArgument")
+    public void listUsage(String name) {
+        printMessage(PrintPacket.MSG_TYPE_NORMAL, "[=Commands=]");
+        for (Usage u : usageList) {
+            printMessage(PrintPacket.MSG_TYPE_NORMAL, u.name + " " + u.type + " " + u.args + " " + u.usage);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connect(String server) throws IllegalStateException, IOException {
+        synchronized (this) {
+            if (isConnected()) {
+                throw new IllegalStateException("already connected");
+            } else {
+                // TODO: handle parsing errors here
+                int separator = server.indexOf(':');
+                String host = server.substring(0, separator);
+                String port = server.substring(separator + 1);
+                new Thread(new Connector(host, Integer.parseInt(port))).start();
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnect() throws IllegalStateException {
+        synchronized (this) {
+            if (!isConnected()) {
+                throw new IllegalStateException("not connected");
+            } else {
+                new Thread(new Disconnector()).start();
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isConnected() {
+        synchronized (this) {
+            return (state == ConnectionState.CONNECTED);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void sendPacket(String msg) {
+        try {
+            if (msg.charAt(0) != ICBProtocol.PKT_NOOP.getPacketType()) {
+                lastMessageSentAt = System.currentTimeMillis();
+            }
+
+            byte[] buf;
+            String encoding = clientProperties.getTextEncoding();
+            if (encoding.equalsIgnoreCase("UTF7")) {
+                buf = Utf7Converter.encode(msg);
+            } else {
+                buf = msg.getBytes(encoding);
+            }
+
+            if (IcyBee.isDebugEnabled()) {
+                System.out.println("Sending packet:");
+                HexDump.dump(System.out, buf);
+            }
+
+            if (buf.length > ICBProtocol.MAX_PACKET_SIZE) {
+                System.err.println("Assertion failure, packet length > MAX_PACKET_SIZE");
+            }
+
+            synchronized (this) {
+                out.write(buf.length);
+                out.write(buf);
+                out.flush();
+            }
+        } catch (UnsupportedEncodingException ex) {
+            // "can't happen" -- US-ASCII is required by Java platform
+            System.err.println("*** FATAL ERROR ***");
+            System.err.println("US-ASCII character encoding required");
+            System.err.println("Aborting...");
+            System.exit(1);
+        } catch (IOException ex) {
+            // bad news! we'll assume that the reader thread will run
+            // into an exception also and shut us down.
+        }
+    }
+
+    /**
+     * Adds a new MessageListener object to the list of objects listening
+     * for MessageEvent notifications.
+     *
+     * @param listener the new listener to add
+     */
+    public void addMessageListener(MessageListener listener) {
+        synchronized (this) {
+            messageListeners.add(listener);
+        }
+    }
+
+    /**
+     * Removes an existing MessageListener object from the list of objects
+     * listening for MessageEvent notifications.
+     *
+     * @param listener the listener to remove
+     */
+    public void removeMessageListener(MessageListener listener) {
+        synchronized (this) {
+            int n = messageListeners.indexOf(listener);
+            if (n >= 0) {
+                messageListeners.remove(n);
+            }
+        }
+    }
+
+    /**
+     * Adds a new StatusListener object to the list of objects listening
+     * for StatusEvent notifications.
+     *
+     * @param listener the new listener to add
+     */
+    public void addStatusListener(StatusListener listener) {
+        synchronized (this) {
+            statusListeners.add(listener);
+        }
+    }
+
+    /**
+     * Removes an existing StatusListener object from the list of objects
+     * listening for StatusEvent notifications.
+     *
+     * @param listener the new listener to remove
+     */
+    public void removeStatusListener(StatusListener listener) {
+        synchronized (this) {
+            int n = statusListeners.indexOf(listener);
+            if (n >= 0) {
+                statusListeners.remove(n);
+            }
+        }
+    }
+
 
     private boolean processPacket(Packet p) {
         boolean continueProcessing = true;
@@ -392,9 +557,6 @@ public class ICBClient implements Client {
         return continueProcessing;
     }
 
-    /**
-     * Indicates that user's login was successful.
-     */
     private void handleLoginPacket(LoginPacket p) {
         reconnectNeeded = 0;
     }
@@ -442,52 +604,6 @@ public class ICBClient implements Client {
         executeInitScript();
     }
 
-
-    static class Usage {
-        String name;
-        String type;
-        String args;
-        String usage;
-    }
-
-    public void addUsage(String name, String type, String args, String usage) {
-        Usage u = new Usage();
-        u.name = name;
-        u.type = type;
-        u.args = args;
-        u.usage = usage;
-        synchronized (usageList) {
-            usageList.add(u);
-        }
-    }
-
-    public void removeUsage(String name) {
-        synchronized (usageList) {
-            ListIterator i = usageList.listIterator();
-            Usage u = null;
-            while (i.hasNext()) {
-                u = (Usage) i.next();
-                if (u.name.compareTo(name) == 0) {
-                    i.remove();
-                    break;
-                }
-            }
-        }
-    }
-
-    // XXX fix this crap
-    public void listUsage(String name) {
-        printMessage(PrintPacket.MSG_TYPE_NORMAL, "[=Commands=]");
-        synchronized (usageList) {
-            ListIterator i = usageList.listIterator();
-            Usage u = null;
-            while (i.hasNext()) {
-                u = (Usage) i.next();
-                printMessage(PrintPacket.MSG_TYPE_NORMAL, u.name + " " + u.type + " " + u.args + " " + u.usage);
-            }
-        }
-    }
-
     private String removeControlCharacters(String s) {
         StringBuffer buf = new StringBuffer(s.length());
         char c;
@@ -502,148 +618,12 @@ public class ICBClient implements Client {
         return buf.toString();
     }
 
+    private void executeInitScript() {
+        final String initScriptName = clientProperties.getInitScript();
+        final String folder = System.getProperty("user.home");
+        final String subdir = Properties.SUBDIRECTORY;
 
-    /**
-     * Attempts to the connect to the specified ICB server.
-     *
-     * @param server The icb server, in hostname:portnumber format.
-     * @throws IllegalStateException if already connected
-     * @throws IOException           if any I/O error occurs
-     */
-    public void connect(String server) throws IllegalStateException, IOException {
-        synchronized (this) {
-            if (isConnected()) {
-                throw new IllegalStateException("already connected");
-            } else {
-                // TODO: handle parsing errors here
-                int separator = server.indexOf(':');
-                String host = server.substring(0, separator);
-                String port = server.substring(separator + 1);
-                new Thread(new Connector(host, Integer.parseInt(port))).start();
-            }
-        }
-    }
-
-    /**
-     * Disconnects from the currently connected ICB server.
-     *
-     * @throws IllegalStateException if not currently connected
-     */
-    public void disconnect() throws IllegalStateException {
-        synchronized (this) {
-            if (!isConnected()) {
-                throw new IllegalStateException("not connected");
-            } else {
-                new Thread(new Disconnector()).start();
-            }
-        }
-    }
-
-    /**
-     * Determines if the client is currently connected or not.
-     */
-    public boolean isConnected() {
-        synchronized (this) {
-            return (state == ConnectionState.CONNECTED);
-        }
-    }
-
-    /**
-     * Sends a single ICB packet to the server.
-     */
-    public void sendPacket(String msg) {
-        try {
-            if (msg.charAt(0) != ICBProtocol.PKT_NOOP.getPacketType()) {
-                lastMessageSentAt = System.currentTimeMillis();
-            }
-
-            byte[] buf = null;
-            String encoding = clientProperties.getTextEncoding();
-            if (encoding.equalsIgnoreCase("UTF7")) {
-                buf = Utf7Converter.encode(msg);
-            } else {
-                buf = msg.getBytes(encoding);
-            }
-
-            if (IcyBee.isDebugEnabled()) {
-                System.out.println("Sending packet:");
-                HexDump.dump(System.out, buf);
-            }
-
-            if (buf.length > ICBProtocol.MAX_PACKET_SIZE) {
-                System.err.println("Assertion failure, packet length > MAX_PACKET_SIZE");
-            }
-
-            synchronized (out) {
-                out.write(buf.length);
-                out.write(buf);
-                out.flush();
-            }
-        } catch (UnsupportedEncodingException ex) {
-            // "can't happen" -- US-ASCII is required by Java platform
-            System.err.println("*** FATAL ERROR ***");
-            System.err.println("US-ASCII character encoding required");
-            System.err.println("Aborting...");
-            System.exit(1);
-        } catch (IOException ex) {
-            // bad news! we'll assume that the reader thread will run
-            // into an exception also and shut us down.
-        }
-    }
-
-    /**
-     * Adds a new MessageListener object to the list of objects listening
-     * for MessageEvent notifications.
-     */
-    public void addMessageListener(MessageListener l) {
-        synchronized (this) {
-            messageListeners.add(l);
-        }
-    }
-
-    /**
-     * Removes an existing MessageListener object from the list of objects
-     * listening for MessageEvent notifications.
-     */
-    public void removeMessageListener(MessageListener l) {
-        synchronized (this) {
-            int n = messageListeners.indexOf(l);
-            if (n >= 0) {
-                messageListeners.remove(n);
-            }
-        }
-    }
-
-    /**
-     * Adds a new StatusListener object to the list of objects listening
-     * for StatusEvent notifications.
-     */
-    public void addStatusListener(StatusListener l) {
-        synchronized (this) {
-            statusListeners.add(l);
-        }
-    }
-
-    /**
-     * Removes an existing StatusListener object from the list of objects
-     * listening for StatusEvent notifications.
-     */
-    public void removeStatusListener(StatusListener l) {
-        synchronized (this) {
-            int n = statusListeners.indexOf(l);
-            if (n >= 0) {
-                statusListeners.remove(n);
-            }
-        }
-    }
-
-    public void executeInitScript() {
-        String initScriptName = clientProperties.getInitScript();
-        String folder = System.getProperty("user.home");
-        String filesep = System.getProperty("file.separator");
-        String subdir = Properties.SUBDIRECTORY;
-
-        File subdirFile = new File(folder + filesep + subdir);
+        File subdirFile = new File(folder, subdir);
         File f = new File(subdirFile, initScriptName);
         if (!f.exists()) {
             f = new File(initScriptName);
@@ -744,20 +724,16 @@ public class ICBClient implements Client {
     private void fireStatusConnecting() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusConnecting(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusConnecting(e);
             }
         }
     }
 
     private void fireMessageReceived(MessageEvent e) {
         synchronized (this) {
-            ListIterator i = messageListeners.listIterator();
-            while (i.hasNext()) {
-                MessageListener l = (MessageListener) i.next();
-                l.messageReceived(e);
+            for (MessageListener listener : messageListeners) {
+                listener.messageReceived(e);
             }
         }
     }
@@ -765,10 +741,8 @@ public class ICBClient implements Client {
     private void fireStatusConnected() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusConnected(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusConnected(e);
             }
         }
     }
@@ -776,10 +750,8 @@ public class ICBClient implements Client {
     private void fireStatusDisconnecting() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusDisconnecting(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusDisconnecting(e);
             }
         }
     }
@@ -787,10 +759,8 @@ public class ICBClient implements Client {
     private void fireStatusDisconnected() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusDisconnected(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusDisconnected(e);
             }
         }
     }
@@ -798,10 +768,8 @@ public class ICBClient implements Client {
     private void fireStatusLoggingStarted() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusLoggingStarted(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusLoggingStarted(e);
             }
         }
     }
@@ -809,10 +777,8 @@ public class ICBClient implements Client {
     private void fireStatusLoggingStopped() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusLoggingStopped(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusLoggingStopped(e);
             }
         }
     }
@@ -820,10 +786,8 @@ public class ICBClient implements Client {
     private void fireStatusOutputPaused() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusOutputPaused(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusOutputPaused(e);
             }
         }
     }
@@ -831,10 +795,8 @@ public class ICBClient implements Client {
     private void fireStatusOutputUnpaused() {
         synchronized (this) {
             EventObject e = new EventObject(this);
-            ListIterator i = statusListeners.listIterator();
-            while (i.hasNext()) {
-                StatusListener l = (StatusListener) i.next();
-                l.statusOutputUnpaused(e);
+            for (StatusListener listener : statusListeners) {
+                listener.statusOutputUnpaused(e);
             }
         }
 
@@ -843,10 +805,10 @@ public class ICBClient implements Client {
     class ConnectionListener implements Runnable {
         public void run() {
             try {
-                byte[] buffer = new byte[256];
-
-                DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream(),
-                        ICBClient.READ_BUFFER_SIZE));
+                final byte[] buffer = new byte[256];
+                final DataInputStream in = new DataInputStream(
+                        new BufferedInputStream(socket.getInputStream(),
+                                ICBClient.READ_BUFFER_SIZE));
 
                 int len;
                 String msg;
@@ -857,7 +819,7 @@ public class ICBClient implements Client {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
-                    assert(len >= 0 && len <= 256);
+                    assert (len >= 0 && len <= 256);
 
                     in.readFully(buffer, 0, len);
                     String encoding = clientProperties.getTextEncoding();
@@ -929,6 +891,7 @@ public class ICBClient implements Client {
             try {
                 readerThread.join();
             } catch (InterruptedException ex) {
+                // NO-OP
             } finally {
                 readerThread = null;
             }

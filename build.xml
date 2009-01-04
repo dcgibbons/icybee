@@ -37,14 +37,14 @@
         <mkdir dir="${build.classes}/images"/>
         <mkdir dir="${build.classes}/help"/>
 
-        <javac classpath="${classpath}" 
-        		debug="on" 
-        		deprecation="on" 
-        		destdir="${build.classes}"
-        		target="1.5"
-                source="1.5"
-        		optimize="on" 
-        		srcdir="${src.java.main.dir}">
+        <javac classpath="${classpath}"
+               debug="on"
+               deprecation="on"
+               destdir="${build.classes}"
+               target="1.5"
+               source="1.5"
+               optimize="on"
+               srcdir="${src.java.main.dir}">
             <include name="**/*.java"/>
             <classpath>
                 <fileset dir="lib">
@@ -73,18 +73,18 @@
                 <include name="**/version.properties"/>
             </fileset>
         </copy>
-        
+
         <copy todir="${build.classes}/images">
-        	<fileset dir="${src.dir}/images">
-        		<include name="*.gif"/>
+            <fileset dir="${src.dir}/images">
+                <include name="*.gif"/>
                 <include name="*.jpg"/>
-        	</fileset>
+            </fileset>
         </copy>
-        
+
         <copy todir="${build.classes}/help">
-        	<fileset dir="${src.dir}/help">
-        		<include name="*"/>
-        	</fileset>
+            <fileset dir="${src.dir}/help">
+                <include name="*"/>
+            </fileset>
         </copy>
     </target>
 
@@ -93,9 +93,13 @@
     <!-- =================================================================== -->
     <target depends="compile" name="main">
         <mkdir dir="${lib.dir}"/>
+
         <jar basedir="${build.classes}"
-                jarfile="${lib.dir}/${name}.jar"
-                manifest="${manifest}"/>
+             excludes="**/*Test.class"
+             jarfile="${lib.dir}/${name}.jar"
+             manifest="${manifest}">
+        </jar>
+
     </target>
 
     <!-- =================================================================== -->
@@ -111,11 +115,16 @@
 
     <target depends="dist" name="sign">
         <echo message="Be sure to define keystore and keystore.password properties."/>
-        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/${name}.jar" keystore="${keystore}" storepass="${keystore.password}"/>
-        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jacl.jar" keystore="${keystore}" storepass="${keystore.password}"/>
-        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jlfgr.jar" keystore="${keystore}" storepass="${keystore.password}"/>
-        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/tcljava.jar" keystore="${keystore}" storepass="${keystore.password}"/>
-        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jnlp.jar" keystore="${keystore}" storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/${name}.jar" keystore="${keystore}"
+                 storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jacl.jar" keystore="${keystore}"
+                 storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jlfgr.jar" keystore="${keystore}"
+                 storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/tcljava.jar" keystore="${keystore}"
+                 storepass="${keystore.password}"/>
+        <signjar alias="nuclearbunny" jar="${icb.dist.dir}/jnlp.jar" keystore="${keystore}"
+                 storepass="${keystore.password}"/>
     </target>
 
     <!-- build admin -->

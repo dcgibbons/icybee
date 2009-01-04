@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,14 @@
 
 package org.nuclearbunny.icybee.ui.util;
 
-import java.util.*;
 import javax.swing.*;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * This extension of JCheckBox will load various textual properties of the
  * component from the specified ResourceBundle using the specified prefix.
- *
+ * <p/>
  * <code>
  * Text/Name: <prefix>.label
  * Mnemonic:  <prefix>.mnemonic

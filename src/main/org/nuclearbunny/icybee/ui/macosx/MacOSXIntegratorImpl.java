@@ -2,7 +2,7 @@
  * IcyBee - http://www.nuclearbunny.org/icybee/
  * A client for the Internet CB Network - http://www.icb.net/
  *
- * Copyright (C) 2000-2008 David C. Gibbons
+ * Copyright (C) 2000-2009 David C. Gibbons
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,16 +21,20 @@
 
 package org.nuclearbunny.icybee.ui.macosx;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-
-import org.nuclearbunny.icybee.ui.UIMessages;
-
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
+import org.nuclearbunny.icybee.ui.UIMessages;
 
-public class MacOSXIntegratorImpl implements ApplicationListener  {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+
+/**
+ * Provides Mac OS X specific integration functionality.
+ *
+ * @see http://developer.apple.com/documentation/Java/Conceptual/Java14Development/04-JavaUIToolkits/JavaUIToolkits.html#//apple_ref/doc/uid/TP40001901
+ */
+public class MacOSXIntegratorImpl implements ApplicationListener {
     private Application application = Application.getApplication();
     private Action aboutAction;
     private Action prefsAction;
@@ -40,7 +44,6 @@ public class MacOSXIntegratorImpl implements ApplicationListener  {
         String appName = UIMessages.messages.getString(UIMessages.ICYBEE_APP_NAME);
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", appName);
         System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("apple.awt.brushMetalLook", "true");
 
         application.setEnabledAboutMenu(true);
         application.setEnabledPreferencesMenu(true);
