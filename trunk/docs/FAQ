@@ -1,0 +1,21 @@
+Q: Why doesn't my mouse wheel work?
+A: Mouse Wheels are only supported by Java Run-Time Environments greater
+   than or equal to 1.4.0. Make sure you have installed at least this
+   version of a JRE and your mouse wheel should begin to work.
+
+Q: How do I setup my *nix system to use IcyBee without launching from a web
+   browser every time?
+A: Create a shortcut or script to execute the following command:
+    /usr/local/javaws/javaws http://www.nuclearbunny.org/icybee/icybee.jnlp
+   Substitute the appropriate path to your javaws executable depending on your
+   local installation.
+
+Q: Help! When I click on a URL from within IcyBee, I get an 
+   "Unable to Display URL" error. How can I configure Java Web Start to 
+   properly integrate with my browser so IcyBee can display URLs?
+A: Launch the javaws executable from your installed location. Once it has
+   loaded, select the Preferences option from the File menu. In the General
+   tab, there is a Browser Setup section where you can type the path to launch
+   your browser of choice. The actual layout of the Java Web Start dialogs
+   will vary between versions, but they should all be similiar to this
+   description.
