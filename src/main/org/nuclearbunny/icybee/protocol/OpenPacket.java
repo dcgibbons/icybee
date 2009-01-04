@@ -42,6 +42,6 @@ public class OpenPacket extends Packet {
     }
 
     public void setText(final String text) {
-        setField(1, text);
+        setField(0, text);
     }
 }
