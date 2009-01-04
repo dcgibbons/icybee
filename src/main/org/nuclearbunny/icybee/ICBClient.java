@@ -660,7 +660,7 @@ public class ICBClient implements Client {
                 if (interval > 0) {
                     TimerTask timerTask = new TimerTask() {
                         public void run() {
-                            sendPacket(ICBProtocol.PKT_NOOP + "\000");
+                            sendPacket(ICBProtocol.PKT_NOOP.getPacketType() + "\000");
                         }
                     };
                     timer = new Timer(true);
