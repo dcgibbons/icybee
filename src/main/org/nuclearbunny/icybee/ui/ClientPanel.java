@@ -228,12 +228,20 @@ public class ClientPanel extends JPanel implements MessageListener {
         inputArea.setCaretColor(foreground);
 
         final FontMetrics fm = inputArea.getFontMetrics(f);
+
+        String timestampPrefix = "";
+        if (client.getProperties().areMessageTimestampsEnabled()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(client.getProperties().getMessageTimestampsFormat());
+            dateFormat.setTimeZone(TimeZone.getDefault());
+            timestampPrefix = dateFormat.format(new Date()) + " ";
+        }
+
         final int[] positions = {
-            fm.stringWidth(" "),
-            fm.stringWidth(" * "),
-            fm.stringWidth(" * MMMMMMMMMMMM 999h 99m"),
-            fm.stringWidth(" * MMMMMMMMMMMM 999h 99m 999+99:99 MM"),
-            fm.stringWidth(" * MMMMMMMMMMMM 999h 99m 999+99:99 MM "),
+            fm.stringWidth(timestampPrefix + " "),
+            fm.stringWidth(timestampPrefix + " * "),
+            fm.stringWidth(timestampPrefix + " * MMMMMMMMMMMM 999h 99m"),
+            fm.stringWidth(timestampPrefix + " * MMMMMMMMMMMM 999h 99m 999+99:99 MM"),
+            fm.stringWidth(timestampPrefix + " * MMMMMMMMMMMM 999h 99m 999+99:99 MM "),
         };
 
         TabSet tabSet = new TabSet(new TabStop[] {
