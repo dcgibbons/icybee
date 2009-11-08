@@ -44,9 +44,9 @@ public class ICBProperties extends Properties {
     private int frameYPos = 0;
     private int frameWidth = 640;
     private int frameHeight = 480;
-    private Boolean toolbarVisible = TRUE;
+    private Boolean toolbarVisible = FALSE;
     private Boolean statusbarVisible = TRUE;
-    private Boolean urlGrabberVisible = TRUE;
+    private Boolean urlGrabberVisible = FALSE;
     private String userNick = "nobody";
     private String userAlternativeNick = "somebody";
     private String userID = System.getProperty("user.name");

@@ -27,6 +27,7 @@ import org.nuclearbunny.icybee.MessageListener;
 import org.nuclearbunny.icybee.protocol.*;
 import org.nuclearbunny.util.BrowserControl;
 import org.nuclearbunny.util.URLMatcher;
+import org.nuclearbunny.util.DateTimeUtils;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -36,10 +37,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,6 +77,7 @@ public class ClientPanel extends JPanel implements MessageListener {
     private String clickedText = null;
     private String selectedNick = null;
     private LinkedList urlListeners = new LinkedList();
+    private SimpleAttributeSet whoListingParagraphAttributes;
 
     // Used to indicate if the output area is currently being auto scrolled
     // whenever data is appended to the area. 
@@ -227,6 +226,25 @@ public class ClientPanel extends JPanel implements MessageListener {
         inputArea.setBackground(background);
         inputArea.setForeground(foreground);
         inputArea.setCaretColor(foreground);
+
+        final FontMetrics fm = inputArea.getFontMetrics(f);
+        final int[] positions = {
+            fm.stringWidth(" "),
+            fm.stringWidth(" * "),
+            fm.stringWidth(" * MMMMMMMMMMMM 999h 99m"),
+            fm.stringWidth(" * MMMMMMMMMMMM 999h 99m 999+99:99 MM"),
+            fm.stringWidth(" * MMMMMMMMMMMM 999h 99m 999+99:99 MM "),
+        };
+
+        TabSet tabSet = new TabSet(new TabStop[] {
+            new TabStop(positions[0], TabStop.ALIGN_LEFT, TabStop.LEAD_NONE),   // moderator
+            new TabStop(positions[1], TabStop.ALIGN_LEFT, TabStop.LEAD_NONE),   // nickname
+            new TabStop(positions[2], TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE),  // idle
+            new TabStop(positions[3], TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE),  // sign-on
+            new TabStop(positions[4], TabStop.ALIGN_LEFT, TabStop.LEAD_NONE),   // address
+        });
+        whoListingParagraphAttributes = new SimpleAttributeSet();
+        StyleConstants.setTabSet(whoListingParagraphAttributes, tabSet);
     }
 
     /**
@@ -551,8 +569,59 @@ public class ClientPanel extends JPanel implements MessageListener {
 
     private void displayCommandOutputPacket(CommandOutputPacket p) throws BadLocationException {
         Style textCommandOutput = client.getProperties().getTextStyle(ClientPanel.TEXT_COMMAND_OUTPUT);
-        displayTextWithEmoticons(p.getCommandOutput(), textCommandOutput);
+        Style textOpenNick = client.getProperties().getTextStyle(ClientPanel.TEXT_OPEN_NICK);
+
+        if (p.getCommandOutputType().equals(CommandOutputPacket.WHO_HEADER)) {
+            final String whoHeader = "\t\tNickname\tIdle\tSign-on\tAccount";
+
+            final int startPos = document.getLength();
+            document.insertString(document.getLength(), whoHeader, textCommandOutput);
+            final int endPos = document.getLength();
+            document.setParagraphAttributes(startPos, endPos - startPos, whoListingParagraphAttributes,
+                    false);
+
+        } else if (p.getCommandOutputType().equals(CommandOutputPacket.WHO_LISTING)) {
+            final int startPos = document.getLength();
+
+            String modFlag = (p.isModerator() ? "\t*\t" : "\t\t");
+            document.insertString(document.getLength(), modFlag, textCommandOutput);
+
+            String nick = p.getNickname();
+            textOpenNick.addAttribute(ClientPanel.TEXT_ATTRIBUTE_NICK, "This is user's nick.");
+            displayTextWithEmoticons(nick, textOpenNick);
+            textOpenNick.removeAttribute(ClientPanel.TEXT_ATTRIBUTE_NICK);
+
+            document.insertString(document.getLength(), "\t", textCommandOutput);
+
+            /* append idle time */
+            document.insertString(document.getLength(), DateTimeUtils.formatElapsedTime(p.getIdleTime()),
+                    textCommandOutput);
+            document.insertString(document.getLength(), "\t", textCommandOutput);
+
+            /* append sign-on time */
+            document.insertString(document.getLength(), DateTimeUtils.formatEventTime(p.getSignOnTime()),
+                    textCommandOutput);
+            document.insertString(document.getLength(), "\t", textCommandOutput);
+
+            /* append address */
+            document.insertString(document.getLength(), p.getUsername(), textCommandOutput);
+            document.insertString(document.getLength(), "@", textCommandOutput);
+            document.insertString(document.getLength(), p.getHostname(), textCommandOutput);
+
+            /* append status */
+            final String status = p.getStatus();
+            if (status != null) {
+                document.insertString(document.getLength(), " " + status, textCommandOutput);
+            }
+
+            final int endPos = document.getLength();
+            document.setParagraphAttributes(startPos, endPos - startPos, whoListingParagraphAttributes, false);
+
+        } else {
+            displayTextWithEmoticons(p.getCommandOutput(), textCommandOutput);
+        }
     }
+
 
     private void displayBeepPacket(BeepPacket p) throws BadLocationException {
         Style textStatus = client.getProperties().getTextStyle(ClientPanel.TEXT_STATUS);

@@ -21,6 +21,9 @@
 
 package org.nuclearbunny.icybee.protocol;
 
+import org.nuclearbunny.util.StringUtils;
+import org.nuclearbunny.util.DateTimeUtils;
+
 import java.net.ProtocolException;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
@@ -38,13 +41,13 @@ public class CommandOutputPacket extends Packet {
     public CommandOutputPacket(final String rawPacket) throws ProtocolException {
         super(rawPacket);
 
-        String cmd = rawPacket.substring(1, 3);
+        cmdOutputType = rawPacket.substring(1, 3);
 
-        if (cmd.compareTo("gh") == 0) {
+        if (cmdOutputType.compareTo("gh") == 0) {
             // group header
             cmdOutput = "Group     ## S  Moderator    ";
 
-        } else if (cmd.compareTo("wg") == 0) {
+        } else if (cmdOutputType.compareTo("wg") == 0) {
             // group name from a who command
             StringBuffer buffer = new StringBuffer();
             buffer.append("Group: ");
@@ -53,20 +56,20 @@ public class CommandOutputPacket extends Packet {
                 buffer.append(" ").append(getField(2));
             }
 
-        } else if (cmd.compareTo("wh") == 0) {
+        } else if (cmdOutputType.compareTo("wh") == 0) {
             // who header
             cmdOutput = "   Nickname      Idle      Sign-on  Account";
 
-        } else if (cmd.compareTo("wl") == 0) {
+        } else if (cmdOutputType.compareTo("wl") == 0) {
             parseWhoListing();
 
-        } else if (cmd.compareTo("ch") == 0) {
+        } else if (cmdOutputType.compareTo("ch") == 0) {
             //System.err.println("unsupported 'ch' command output received");
 
-        } else if (cmd.compareTo("c") == 0) {
+        } else if (cmdOutputType.compareTo("c") == 0) {
             cmdOutput = "/" + getField(1);
 
-        } else if (cmd.compareTo("co") == 0) {
+        } else if (cmdOutputType.compareTo("co") == 0) {
             cmdOutput = rawPacket.substring(4, rawPacket.length() - 1); // XXX this is broken
 
         } else {
@@ -74,10 +77,43 @@ public class CommandOutputPacket extends Packet {
         }
     }
 
+    public String getCommandOutputType() {
+        return cmdOutputType;
+    }
+
     public String getCommandOutput() {
         return cmdOutput;
     }
 
+    public boolean isModerator() {
+        return (getField(1).charAt(0) == 'm');
+    }
+
+    public String getNickname() {
+        return getField(2);
+    }
+
+    public long getIdleTime() {
+        return Long.parseLong(getField(3));
+    }
+
+    public Date getSignOnTime() {
+        return new Date(Long.parseLong(getField(5)) * 1000L);
+    }
+
+    public String getUsername() {
+        return getField(6);
+    }
+
+    public String getHostname() {
+        return getField(7);
+    }
+
+    public String getStatus() {
+        return getField(8);
+    }
+    
+    private String cmdOutputType;
     private String cmdOutput;
 
     private void parseWhoListing() {
@@ -93,53 +129,18 @@ public class CommandOutputPacket extends Packet {
         if (nickLen > fieldWidth) {
             buffer.append(nick.substring(1, fieldWidth));
         } else {
-            buffer.append(nick);
-            buffer.append(getSpaces(fieldWidth - nickLen));
+            buffer.append(nick)
+                  .append(StringUtils.repeatString(" ", fieldWidth - nickLen));
         }
         buffer.append(" ");
 
         /* append idle time */
-        long idle = Long.parseLong(getField(3));
-        if (idle < 60) {
-            buffer.append("       - ");
-        } else {
-            long hours = idle / 3600;
-            if (hours > 0) {
-                NumberFormat nf = NumberFormat.getNumberInstance();
-                FieldPosition fp = new FieldPosition(NumberFormat.INTEGER_FIELD);
-                nf.setMaximumIntegerDigits(3);
-                String h = nf.format(hours, new StringBuffer(), fp).toString();
-                buffer.append(getSpaces(3 - fp.getEndIndex())).append(h)
-                        .append("h ");
-                idle -= 3600 * hours;
-            } else {
-                buffer.append("     ");
-            }
-
-            long minutes = idle / 60;
-            if (minutes < 10) {
-                buffer.append(' ');
-            }
-            buffer.append(minutes).append("m ");
-        }
+        buffer.append(DateTimeUtils.formatElapsedTime(getIdleTime()))
+              .append(" ");
 
         /* append sign-on time */
-        long now = System.currentTimeMillis();
-        Date d = new Date(Long.parseLong(getField(5)) * 1000L);
-        long days = (now - d.getTime()) / 86400000L; // milliseconds in a day
-        if (days > 0) {
-            NumberFormat nf = NumberFormat.getNumberInstance();
-            FieldPosition fp = new FieldPosition(NumberFormat.INTEGER_FIELD);
-            nf.setMaximumIntegerDigits(3);
-            String ds = nf.format(days, new StringBuffer(), fp).toString();
-            buffer.append(getSpaces(3 - fp.getEndIndex())).append(ds).append('+');
-        } else {
-            buffer.append("    ");
-        }
-
-        SimpleDateFormat df = new SimpleDateFormat("hh:mm aa");
-        df.setTimeZone(TimeZone.getDefault());
-        buffer.append(df.format(d)).append(' ');
+        buffer.append(DateTimeUtils.formatEventTime(getSignOnTime()))
+              .append(" ");
 
         /* append address */
         buffer.append(getField(6)).append("@").append(getField(7));
@@ -150,13 +151,5 @@ public class CommandOutputPacket extends Packet {
         }
 
         cmdOutput = buffer.toString();
-    }
-
-    private static String getSpaces(int n) {
-        StringBuffer buffer = new StringBuffer(n);
-        for (int i = 0; i < n; i++) {
-            buffer.append(' ');
-        }
-        return buffer.toString();
     }
 }
