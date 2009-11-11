@@ -61,7 +61,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
     private JMenuItem clearTabItem;
     private JMenuItem saveTabItem;
     private Map personalPanels;
-    private URLGrabber urlWatcher;
 
     private JMenu fileMenu;
     private JMenu editMenu;
@@ -80,7 +79,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
     private Action pasteSpecialAction;
     private Action toolbarAction;
     private Action statusbarAction;
-    private Action urlGrabberAction;
     private Action reportBugAction;
     private Action mailingListAction;
     private Action sourceForgeProjectAction;
@@ -180,7 +178,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
         pasteSpecialAction = new PasteSpecialAction();
         toolbarAction = new ToolbarAction();
         statusbarAction = new StatusbarAction();
-        urlGrabberAction = new URLGrabberAction();
         reportBugAction = new ReportBugAction();
         mailingListAction = new MailingListAction();
         sourceForgeProjectAction = new SourceForgeProjectAction();
@@ -258,7 +255,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
         viewMenu.setMnemonic(KeyEvent.VK_V);
         viewMenu.add(toolbarAction).setMnemonic('T');
         viewMenu.add(statusbarAction).setMnemonic('S');
-        viewMenu.add(urlGrabberAction).setMnemonic('U');
         viewMenu.addSeparator();
         viewMenu.add(lookAndFeelMenu);
         menuBar.add(viewMenu);
@@ -298,18 +294,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 
         statusBar = new StatusBar(client);
         groupPanel = new ClientPanel(client);
-
-        urlWatcher = new URLGrabber();
-        urlWatcher.setLocation(this.getX() + 100, this.getY() + 100); // ICK! save this location instead
-        urlWatcher.setSize(320, 240);
-        urlWatcher.setVisible(client.getProperties().isURLGrabberVisible());
-        urlWatcher.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent evt) {
-                ICBProperties props = client.getProperties();
-                props.setURLGrabberVisible(false);
-            }
-        });
-        groupPanel.addURLListener(urlWatcher);
 
         /* add the primary components to the root panel */
         JPanel contentPane = (JPanel) getContentPane();
@@ -362,7 +346,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
         ClientPanel p = (ClientPanel) personalPanels.get(lowerCaseNick);
         if (p == null) {
             PersonalPanel pp = new PersonalPanel(client, nick);
-            pp.addURLListener(urlWatcher);
             personalPanels.put(lowerCaseNick, pp);
             tabbedPanel.add(nick, pp);
             pp.clear();
@@ -660,20 +643,6 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
             statusBar.setVisible(visible);
             ICBProperties props = client.getProperties();
             props.setStatusbarVisible(visible);
-        }
-    }
-
-    class URLGrabberAction extends AbstractAction {
-        public URLGrabberAction() {
-            putValue(Action.NAME, "URL Grabber");
-            putValue(Action.SHORT_DESCRIPTION, "Show or hide the URL Grabber Window");
-        }
-
-        public void actionPerformed(ActionEvent evt) {
-            boolean visible = !urlWatcher.isVisible();
-            urlWatcher.setVisible(visible);
-            ICBProperties props = client.getProperties();
-            props.setURLGrabberVisible(visible);
         }
     }
 

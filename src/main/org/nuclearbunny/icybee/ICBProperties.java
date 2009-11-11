@@ -46,7 +46,6 @@ public class ICBProperties extends Properties {
     private int frameHeight = 480;
     private Boolean toolbarVisible = FALSE;
     private Boolean statusbarVisible = TRUE;
-    private Boolean urlGrabberVisible = FALSE;
     private String userNick = "nobody";
     private String userAlternativeNick = "somebody";
     private String userID = System.getProperty("user.name");
@@ -93,7 +92,6 @@ public class ICBProperties extends Properties {
     private String frameHeightName = "frame.height";
     private String toolbarVisibleName = "toolbar.visible";
     private String statusbarVisibleName = "statusbar.visible";
-    private String urlGrabberVisibleName = "urlgrabber.visible";
     private String userNickName = "user.nick";
     private String userAlternativeNickName = "user.alternative.nick";
     private String userIDName = "user.id";
@@ -183,14 +181,6 @@ public class ICBProperties extends Properties {
 
     public boolean isStatusbarVisible() {
         return statusbarVisible;
-    }
-
-    public boolean isURLGrabberVisible() {
-        return urlGrabberVisible;
-    }
-
-    public void setURLGrabberVisible(boolean visible) {
-        this.urlGrabberVisible = visible;
     }
 
     public void setUserNick(String userNick) {
@@ -481,7 +471,6 @@ public class ICBProperties extends Properties {
         defaults.put(frameHeightName, Integer.toString(frameHeight));
         defaults.put(toolbarVisibleName, toolbarVisible.toString());
         defaults.put(statusbarVisibleName, statusbarVisible.toString());
-        defaults.put(urlGrabberVisibleName, urlGrabberVisible.toString());
         defaults.put(userNickName, userNick);
         defaults.put(userAlternativeNickName, userAlternativeNick);
         defaults.put(userIDName, userID);
@@ -551,7 +540,6 @@ public class ICBProperties extends Properties {
         frameHeight = Integer.parseInt(properties.getProperty(frameHeightName));
         toolbarVisible = valueOf(properties.getProperty(toolbarVisibleName));
         statusbarVisible = valueOf(properties.getProperty(statusbarVisibleName));
-        urlGrabberVisible = valueOf(properties.getProperty(urlGrabberVisibleName));
         userNick = properties.getProperty(userNickName);
         userAlternativeNick = properties.getProperty(userAlternativeNickName);
         userID = properties.getProperty(userIDName);
@@ -599,7 +587,6 @@ public class ICBProperties extends Properties {
         properties.put(frameHeightName, Integer.toString(frameHeight));
         properties.put(toolbarVisibleName, toolbarVisible.toString());
         properties.put(statusbarVisibleName, statusbarVisible.toString());
-        properties.put(urlGrabberVisibleName, urlGrabberVisible.toString());
         properties.put(userNickName, userNick);
         properties.put(userAlternativeNickName, userAlternativeNick);
         properties.put(userIDName, userID);
