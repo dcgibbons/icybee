@@ -144,6 +144,7 @@ public class ClientPanel extends JPanel implements MessageListener {
 
         outputScrollPane = new JScrollPane(outputArea);
         outputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        outputScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         JScrollBar outputScrollBar = outputScrollPane.getVerticalScrollBar();
 
         outputScrollBar.addAdjustmentListener(new AdjustmentListener() {

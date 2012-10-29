@@ -31,5 +31,9 @@ public class OutputTextPane extends JTextPane {
         super(document);
         this.clientPanel = clientPanel;
     }
+
+    public boolean getScrollableTracksViewportWidth() {
+        return true;
+    }
 }
 
