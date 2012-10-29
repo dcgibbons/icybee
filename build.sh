@@ -3,7 +3,7 @@
 # IcyBee - http://www.nuclearbunny.org/icybee/
 # A client for the Internet CB Network - http://www.icb.net/
 #
-# Copyright (C) 2000-2009 David C. Gibbons
+# Copyright (C) 2000-2012 David C. Gibbons
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ fi
 export _ANT_HOME
 echo Using _ANT_HOME=$_ANT_HOME
 
-_CLASSPATH=$_ANT_HOME/lib/ant.jar:$JAVA_HOME/lib/tools.jar
+_CLASSPATH=$_ANT_HOME/lib/ant.jar:$_ANT_HOME/lib/ant-launcher.jar:$JAVA_HOME/lib/tools.jar
 if [ "$CLASSPATH" != "" ] ; then
     _CLASSPATH=$_CLASSPATH:$CLASSPATH
 fi
@@ -41,5 +41,4 @@ export _CLASSPATH
 echo Building with classpath $_CLASSPATH
 echo Using _ANT_OPTS=$_ANT_OPTS
 
-$JAVA_HOME/bin/java -classpath "$_CLASSPATH" org.apache.tools.ant.Main $_ANT_OPTS $*
-
+$JAVA_HOME/bin/java -classpath "$_CLASSPATH" -Dant.home="$_ANT_HOME" org.apache.tools.ant.launch.Launcher $_ANT_OPTS $*
